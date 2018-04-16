@@ -1,0 +1,4 @@
+﻿  1.cpp
+d:\work\my\курсовая\test_sfml1\test_sfml1\1.cpp(21): warning C4305: аргумент: усечение из "double" в "float"
+d:\work\my\курсовая\test_sfml1\test_sfml1\1.cpp(22): warning C4305: аргумент: усечение из "double" в "float"
+  test_sfml1.vcxproj -> D:\work\my\Курсовая\test_sfml1\Debug\test_sfml1.exe
