@@ -10,7 +10,7 @@ const int windowWidth = 800, windowHeight = 600;
 //константа скорости корабля
 const float ship_velocity = 6.f;
 //изначальное количество землян
-const long int earthlings = 10000000000000;
+const long long int earthlings = 10000000000;
 
 class Ship {
 public: //чтобы потом преобразовать класс в родительский
@@ -35,7 +35,7 @@ public: //чтобы потом преобразовать класс в род�
       velocity.x = -ship_velocity;
     }
     //аналогично здесь
-    else if (Keyboard::isKeyPressed(sf::Keyboard::Right) && x() < 745) {
+    else if (Keyboard::isKeyPressed(sf::Keyboard::Right) && x() < 764) {
       velocity.x = ship_velocity;
     }
     //если ничего не нажато, корабль не двигается
@@ -69,6 +69,11 @@ public:
 
   void update() {
     ship_sprite.move(velocity);
+
+    /*присутствует баг при нажатием двух клавиш одновременно
+    приоритет при движении влево, отсюда разное поведение
+    в правой и левой границах экрана*/
+
     //если нажата Left и корабль не уехал за границу, двигаемся влево
     if (Keyboard::isKeyPressed(sf::Keyboard::A) && x() > 0) {
       velocity.x = -ship_velocity;
@@ -90,11 +95,11 @@ public:
   bool destroyed = false;
 };
 
-bool is_it_the_end(Ship ship1, Ship_2 ship2, long int people) {
-  if (ship1.destroyed == true && ship2.destroyed == true) {
+bool is_it_the_end(Ship ship1, Ship_2 ship2, long long int people) {
+  if (ship1.destroyed && ship2.destroyed) {
     return false;
   }
-  if (people < 2000000000000) {
+  if (people < 2000000000) {
     return false;
   }
   return true;
