@@ -19,6 +19,7 @@ public: //чтобы потом преобразовать класс в род�
   Texture ship_texture;
   Sprite ship_sprite;
   int ship_health = 100;
+  bool destroyed = false;
 
   Ship(float X, float Y) {
     ship_image.loadFromFile("images/pl1.png");
@@ -30,25 +31,21 @@ public: //чтобы потом преобразовать класс в род�
 
   void update() {
     ship_sprite.move(velocity);
-    //если нажата Left и корабль не уехал за границу, двигаемся влево
-    if (Keyboard::isKeyPressed(sf::Keyboard::Left) && x() > 0) {
-      velocity.x = -ship_velocity;
-    }
+    //если нажата только клавиша Left и корабль не уехал за границу, двигаемся влево
+    if(Keyboard::isKeyPressed(Keyboard::Left) && !Keyboard::isKeyPressed(Keyboard::Right) && x() > 0)
+        velocity.x = -ship_velocity;
     //аналогично здесь
-    else if (Keyboard::isKeyPressed(sf::Keyboard::Right) && x() < 764) {
-      velocity.x = ship_velocity;
-    }
+    else if (Keyboard::isKeyPressed(Keyboard::Right) && !Keyboard::isKeyPressed(Keyboard::Left) && x() < 764)
+        velocity.x = ship_velocity;
     //если ничего не нажато, корабль не двигается
-    else {
+    else
       velocity.x = 0;
-    }
-  }
+}
 
   //вычисляем позицию
   float x() { return ship_sprite.getPosition().x; }
 
   //определяет, разрушен ли корабль или нет
-  bool destroyed = false;
 };
 
 class Ship_2 {
@@ -70,16 +67,12 @@ public:
   void update() {
     ship_sprite.move(velocity);
 
-    /*присутствует баг при нажатием двух клавиш одновременно
-    приоритет при движении влево, отсюда разное поведение
-    в правой и левой границах экрана*/
-
-    //если нажата Left и корабль не уехал за границу, двигаемся влево
-    if (Keyboard::isKeyPressed(sf::Keyboard::A) && x() > 0) {
+    //если нажата A и корабль не уехал за границу, двигаемся влево
+    if (Keyboard::isKeyPressed(sf::Keyboard::A) && !Keyboard::isKeyPressed(sf::Keyboard::D) && x() > 0) {
       velocity.x = -ship_velocity;
     }
     //аналогично здесь
-    else if (Keyboard::isKeyPressed(sf::Keyboard::D) && x() < 745) {
+    else if (Keyboard::isKeyPressed(sf::Keyboard::D) && !Keyboard::isKeyPressed(sf::Keyboard::A) && x() < 745) {
       velocity.x = ship_velocity;
     }
     //если ничего не нажато, корабль не двигается
