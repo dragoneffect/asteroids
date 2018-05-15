@@ -1,5 +1,5 @@
-#ifndef MAP_H_INCLUDED
-#define MAP_H_INCLUDED
+#ifndef SHIP_H
+#define SHIP_H
 
 class Ship : public Model {
 public:
@@ -16,6 +16,6 @@ public:
 
   }
   //вычисляем позицию
-  float check_x() { return model_sprite.getPosition().x; }
+  float x() { return model_sprite.getPosition().x; }
 };
 #endif

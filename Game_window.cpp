@@ -1,11 +1,13 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
-#include "model.h"
+#include "Model.h"
+#include "Ship.h"
+#include "global.h"
+#include "Game_window.h"
 
 using namespace std;
 using namespace sf;
 
-bool is_it_the_end(Ship ship1, Ship_2 ship2, long long int people) {
+bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
   if (ship1.destroyed || ship2.destroyed) {
     return false;
   }
@@ -19,9 +21,10 @@ void Window(){
 int count = 0;
 
 sf::Font font;
-if (!font.loadFromFile("font.ttf")) {
+//придумать чонить это же войд
+/*if (!font.loadFromFile("font.ttf")) {
      return -1;
-}
+} */
 sf::Text text;
 text.setFont(font);
 Model map("background.png");
