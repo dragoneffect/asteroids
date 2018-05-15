@@ -10,7 +10,7 @@ const int windowWidth = 800, windowHeight = 600;
 //константа скорости корабля
 const float ship_velocity = 6.f;
 //изначальное количество землян
-const long long int earthlings = 10000000000;
+const float earthlings = 10.000000000;
 
 class Ship {
 public: //чтобы потом преобразовать класс в родительский
@@ -19,7 +19,7 @@ public: //чтобы потом преобразовать класс в род�
   Texture ship_texture;
   Sprite ship_sprite;
   int ship_health = 100;
-  bool destroyed = false;
+  bool destroyed = false; //определяет, разрушен ли корабль или нет
 
   Ship(float X, float Y) {
     ship_image.loadFromFile("images/pl1.png");
@@ -44,8 +44,6 @@ public: //чтобы потом преобразовать класс в род�
 
   //вычисляем позицию
   float x() { return ship_sprite.getPosition().x; }
-
-  //определяет, разрушен ли корабль или нет
 };
 
 class Ship_2 {
@@ -88,19 +86,24 @@ public:
   bool destroyed = false;
 };
 
-bool is_it_the_end(Ship ship1, Ship_2 ship2, long long int people) {
+bool is_it_the_end(Ship ship1, Ship_2 ship2, float people) {
   if (ship1.destroyed && ship2.destroyed) {
     return false;
   }
-  if (people < 2000000000) {
+  if (people < 2.000000000) {
     return false;
   }
   return true;
 }
 
 int main() {
-
   int count = 0;
+  Image map_image;
+  map_image.loadFromFile("images/background.png");
+  Texture map;
+  map.loadFromImage(map_image);
+  Sprite s_map;
+  s_map.setTexture(map);
 
   sf::Font font;
   if (!font.loadFromFile("font.ttf")) {
@@ -131,8 +134,8 @@ int main() {
 
     std::stringstream st;
 
-    window.clear(Color::Black);
-
+    window.clear();
+    window.draw(s_map);
     window.setVerticalSyncEnabled(true);
 
     if (is_it_the_end(ship, ship_2, earthlings)) {
