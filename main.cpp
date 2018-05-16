@@ -1,9 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <sstream>
-
-using namespace std;
-using namespace sf;
+#include "menu.h"
 
 //константы размера окна
 const int windowWidth = 800, windowHeight = 600;
@@ -11,6 +6,7 @@ const int windowWidth = 800, windowHeight = 600;
 const float ship_velocity = 6.f;
 //изначальное количество землян
 const float earthlings = 10.000000000;
+
 
 class Ship {
 public: //чтобы потом преобразовать класс в родительский
@@ -31,16 +27,19 @@ public: //чтобы потом преобразовать класс в род�
 
   void update() {
     ship_sprite.move(velocity);
-    //если нажата только клавиша Left и корабль не уехал за границу, двигаемся влево
-    if(Keyboard::isKeyPressed(Keyboard::Left) && !Keyboard::isKeyPressed(Keyboard::Right) && x() > 0)
-        velocity.x = -ship_velocity;
+    //если нажата только клавиша Left и корабль не уехал за границу, двигаемся
+    //влево
+    if (Keyboard::isKeyPressed(Keyboard::Left) &&
+        !Keyboard::isKeyPressed(Keyboard::Right) && x() > 0)
+      velocity.x = -ship_velocity;
     //аналогично здесь
-    else if (Keyboard::isKeyPressed(Keyboard::Right) && !Keyboard::isKeyPressed(Keyboard::Left) && x() < 764)
-        velocity.x = ship_velocity;
+    else if (Keyboard::isKeyPressed(Keyboard::Right) &&
+             !Keyboard::isKeyPressed(Keyboard::Left) && x() < 764)
+      velocity.x = ship_velocity;
     //если ничего не нажато, корабль не двигается
     else
       velocity.x = 0;
-}
+  }
 
   //вычисляем позицию
   float x() { return ship_sprite.getPosition().x; }
@@ -66,11 +65,13 @@ public:
     ship_sprite.move(velocity);
 
     //если нажата A и корабль не уехал за границу, двигаемся влево
-    if (Keyboard::isKeyPressed(sf::Keyboard::A) && !Keyboard::isKeyPressed(sf::Keyboard::D) && x() > 0) {
+    if (Keyboard::isKeyPressed(sf::Keyboard::A) &&
+        !Keyboard::isKeyPressed(sf::Keyboard::D) && x() > 0) {
       velocity.x = -ship_velocity;
     }
     //аналогично здесь
-    else if (Keyboard::isKeyPressed(sf::Keyboard::D) && !Keyboard::isKeyPressed(sf::Keyboard::A) && x() < 745) {
+    else if (Keyboard::isKeyPressed(sf::Keyboard::D) &&
+             !Keyboard::isKeyPressed(sf::Keyboard::A) && x() < 745) {
       velocity.x = ship_velocity;
     }
     //если ничего не нажато, корабль не двигается
@@ -120,15 +121,17 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
                           sf::Style::Default);
 
+  bool is_running = true;
+
   //программа работает, пока окно открыто
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
-      //закрываем окно (в т.ч. по нажатию Escape)
-      if (event.type == sf::Event::Closed ||
-          (event.type == sf::Event::KeyPressed &&
-           event.key.code == sf::Keyboard::Escape)) {
-        window.close();
+      //открываем меню по нажатию Esc
+      if (event.type == sf::Event::KeyPressed &&
+          event.key.code == sf::Keyboard::Escape) {
+        is_running = false;
+        menu(window, is_running);
       }
     }
 
