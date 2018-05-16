@@ -36,11 +36,11 @@ int main() {
     while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
-      //закрываем окно (в т.ч. по нажатию Escape)
-      if (event.type == sf::Event::Closed ||
-          (event.type == sf::Event::KeyPressed &&
-           event.key.code == sf::Keyboard::Escape)) {
-        window.close();
+      //открываем меню по нажатию Esc
+      if (event.type == sf::Event::KeyPressed &&
+          event.key.code == sf::Keyboard::Escape) {
+        is_running = false;
+        menu(window, is_running);
       }
     }
     std::stringstream st;
