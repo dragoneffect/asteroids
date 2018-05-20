@@ -1,4 +1,5 @@
-#include "include/global.h"
+#include "menu.h"
+#include "bullet.h"
 
 bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
   if (ship1.destroyed && ship2.destroyed) {
@@ -52,6 +53,15 @@ int main() {
     if (is_it_the_end(ship, ship_2, earthlings)) {
       ship.update();
       ship_2.update();
+      bullet.update();
+      if (bullet.destroyed) {
+        bullet.bullet_sprite.setPosition(ship.x() + 14, ship.y());
+      }
+      if (bullet.half)
+        bullet_2.update();
+      if (bullet_2.destroyed) {
+        bullet_2.bullet_sprite.setPosition(ship.x() + 14, ship.y());
+      }
     }
     //вывод счета на экран
     st << count;
