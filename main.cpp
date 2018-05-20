@@ -1,4 +1,5 @@
 #include "menu.h"
+#include "bullet.h"
 
 //константы размера окна
 const int windowWidth = 800, windowHeight = 600;
@@ -6,7 +7,6 @@ const int windowWidth = 800, windowHeight = 600;
 const float ship_velocity = 6.f;
 //изначальное количество землян
 const float earthlings = 10.000000000;
-
 
 class Ship {
 public: //чтобы потом преобразовать класс в родительский
@@ -43,6 +43,7 @@ public: //чтобы потом преобразовать класс в род�
 
   //вычисляем позицию
   float x() { return ship_sprite.getPosition().x; }
+  float y() { return ship_sprite.getPosition().y; }
 };
 
 class Ship_2 {
@@ -117,6 +118,9 @@ int main() {
   Ship ship(windowWidth / 2, windowHeight - 80);
   Ship_2 ship_2((windowWidth / 2) - 50, windowHeight - 80);
 
+  Bullet bullet(ship.x() + 14, ship.y());
+  Bullet bullet_2(ship.x() + 14, ship.y());
+
   //открытие окна
   sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
                           sf::Style::Default);
@@ -144,11 +148,23 @@ int main() {
     if (is_it_the_end(ship, ship_2, earthlings)) {
       ship.update();
       ship_2.update();
+      bullet.update();
+      if (bullet.destroyed) {
+        bullet.bullet_sprite.setPosition(ship.x() + 14, ship.y());
+      }
+      if (bullet.half)
+        bullet_2.update();
+      if (bullet_2.destroyed) {
+        bullet_2.bullet_sprite.setPosition(ship.x() + 14, ship.y());
+      }
     }
 
     //вывод счета на экран
     st << count;
     text.setString(st.str());
+
+    bullet.draw(window);
+    bullet_2.draw(window);
 
     window.draw(ship_2.ship_sprite);
     window.draw(ship.ship_sprite);
