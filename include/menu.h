@@ -2,7 +2,6 @@
 #define MENU_H
 
 #include <SFML/Graphics.hpp>
-#include "menu.h"
 #include <sstream>
 
 using namespace std;

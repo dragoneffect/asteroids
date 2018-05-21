@@ -1,4 +1,4 @@
-#include "menu.h"
+#include "../include/menu.h"
 
 bool menu(RenderWindow &window, bool running) {
   Image buttn1_image;
