@@ -1,0 +1,19 @@
+CC=g++
+OBJ = $(CC) -c $< -o $@ $(CXXFLAGS)
+CXXFLAGS=-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+
+default: asteroids
+
+asteroids: build/main.o build/menu.o 
+	$(CC) $^ -o $@ $(CXXFLAGS) 
+
+build/main.o: src/main.cpp
+	mkdir build
+	 $(OBJ) -std=c++11
+
+build/menu.o: src/menu.cpp
+	$(OBJ) 
+
+clean:
+	rm -f build/*.o asteroids
+	rmdir build
