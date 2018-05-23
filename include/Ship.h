@@ -37,5 +37,10 @@ public:
   //вычисляем позицию
   float x() { return model_sprite.getPosition().x; }
   float y() { return model_sprite.getPosition().y; }
+  float left() { return x() - 18; }
+  float right() { return x() + 18; }
+  float top() { return y() - 36; }
+  float bottom() { return y() + 36; }
 };
+
 #endif

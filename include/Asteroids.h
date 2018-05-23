@@ -18,6 +18,11 @@ public:
     }
     if(y() == 600) destroyed = true;
   }
+  float x() { return model_sprite.getPosition().x; }
   float y() { return model_sprite.getPosition().y; }
+  float left() { return x() - 20; }
+  float right() { return x() + 20; }
+  float top() { return y() - 52; }
+  float bottom() { return y() + 52; }
 };
 #endif

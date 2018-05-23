@@ -38,6 +38,9 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   } else if (ship2.ship_health == 3) {
     life_image.loadFromFile("images/3.png");
   }
+  else {
+    life_image.loadFromFile("images/0.png");
+  }
   life_image.createMaskFromColor(Color(0, 0, 0));
   life_texture.loadFromImage(life_image);
   life_sprite.setTexture(life_texture);
@@ -49,6 +52,9 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
     life2_image.loadFromFile("images/2.png");
   } else if (ship.ship_health == 3) {
     life2_image.loadFromFile("images/3.png");
+  }
+  else {
+    life2_image.loadFromFile("images/0.png");
   }
   life2_image.createMaskFromColor(Color(0, 0, 0));
   life2_texture.loadFromImage(life2_image);

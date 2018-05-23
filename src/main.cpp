@@ -28,6 +28,21 @@ bool first_to_draw(Ship ship, Ship ship_2) {
     return true;
 }
 
+bool isIntersecting(Ship ship, Asteroid asteroid) {
+  return ship.right() >= asteroid.left() && ship.left() <= asteroid.right() &&
+         ship.bottom() >= asteroid.top() && ship.top() <= asteroid.bottom();
+}
+
+void Collision(Ship &ship, Asteroid &asteroid) {
+  //если столкновения не было, ничего не произойдет
+  if (!isIntersecting(ship, asteroid)) {
+    return;
+  }
+  //иначе разрушаем астероид, отнимаем одну жизнь у корабля
+  asteroid.destroyed = true;
+  ship.ship_health--;
+}
+
 int main() {
   //счет
   int count = 0;
@@ -179,6 +194,9 @@ int main() {
 
     bullet.draw(window);
     bullet_2.draw(window);
+    
+    Collision(ship, asteroid);
+    Collision(ship_2, asteroid);
 
     interface(window, ship, ship_2, count, earthlings, survived);
 
