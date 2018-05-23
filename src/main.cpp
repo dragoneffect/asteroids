@@ -4,7 +4,7 @@
 //#include "../include/Model.h"
 #include "../include/Ship.h"
 #include "../include/assistant.h"
-#include "../include/bullet.h"
+//#include "../include/bullet.h"
 #include "../include/Asteroids.h"
 
 
@@ -44,20 +44,13 @@ int main() {
   Assistant assist(start_x_assist, start_y_assist, "assistant.png",
                    Keyboard::Space);
 
-<<<<<<< HEAD
   Bullet bullet(ship.x() + ship_blue_width, ship.y(), "bullet.png");
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   srand(time(NULL));
   Asteroid asteroid((float)rand() / RAND_MAX * 600, 0, "asteroid.png");
-||||||| merged common ancestors
-  Bullet bullet(ship.x() + ship_blue_width, ship.y());
-  Bullet bullet_2(ship.x() + ship_blue_width, ship.y());
-=======
-  Bullet bullet(ship.x() + ship_blue_width, ship.y());
-  Bullet bullet_2(ship.x() + ship_blue_width, ship.y());
-  Bullet bullet_3(ship_2.x() + ship_red_width, ship_2.y());
-  Bullet bullet_4(ship_2.x() + ship_red_width, ship_2.y());
->>>>>>> faeab422a0f882aeeaddd067449b190ea547498f
+
+  Bullet bullet_3(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
+  Bullet bullet_4(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
 
   bool menu_running = true;
 
@@ -107,17 +100,13 @@ int main() {
     if (is_it_the_end(ship, ship_2, earthlings)) {
       ship.update();
       ship_2.update();
-<<<<<<< HEAD
       bullet.update();
       bullet_2.update();
       asteroid.update();
       if (bullet.destroyed) {
         bullet.model_sprite.setPosition(ship.x() + ship_blue_width,ship.y());
-||||||| merged common ancestors
-      bullet.update();
-      if (bullet.destroyed) {
-        bullet.bullet_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
-=======
+        bullet.update();
+    }
 
       if (event.key.code == sf::Keyboard::Space) {
         if (ability_red) {
@@ -126,23 +115,19 @@ int main() {
         } else {
           ability_red_use = false;
         }
->>>>>>> faeab422a0f882aeeaddd067449b190ea547498f
       }
-<<<<<<< HEAD
       if (bullet.half)
         bullet_2.update();
       if (bullet_2.destroyed) {
         bullet_2.model_sprite.setPosition(ship_2.x() + ship_red_width, ship_2.y());
       }
-      if(asteroid.destroyed){
+      if(asteroid.destroyed)
          asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
-||||||| merged common ancestors
       if (bullet.half)
         bullet_2.update();
       if (bullet_2.destroyed) {
-        bullet_2.bullet_sprite.setPosition(ship.x() + ship_blue_width,
+        bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
                                            ship.y());
-=======
 
       if (ability_red_use) {
         if (red_time > 0) {
@@ -159,14 +144,14 @@ int main() {
         bullet.update();
         bullet.draw(window);
         if (bullet.destroyed) {
-          bullet.bullet_sprite.setPosition(ship.x() + ship_blue_width,
+          bullet.model_sprite.setPosition(ship.x() + ship_blue_width,
                                            ship.y());
         }
         if (bullet.half)
           bullet_2.update();
-        bullet_2.draw(window);
+          bullet_2.draw(window);
         if (bullet_2.destroyed) {
-          bullet_2.bullet_sprite.setPosition(ship.x() + ship_blue_width,
+          bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
                                              ship.y());
         }
       }
@@ -174,17 +159,16 @@ int main() {
         bullet_3.update();
         bullet_3.draw(window);
         if (bullet_3.destroyed) {
-          bullet_3.bullet_sprite.setPosition(ship_2.x() + ship_red_width,
+          bullet_3.model_sprite.setPosition(ship_2.x() + ship_red_width,
                                              ship_2.y());
         }
         if (bullet_3.half)
           bullet_4.update();
         bullet_4.draw(window);
         if (bullet_4.destroyed) {
-          bullet_4.bullet_sprite.setPosition(ship_2.x() + ship_red_width,
+          bullet_4.model_sprite.setPosition(ship_2.x() + ship_red_width,
                                              ship_2.y());
         }
->>>>>>> faeab422a0f882aeeaddd067449b190ea547498f
       }
     }
     //вывод счета на экран
@@ -205,19 +189,12 @@ int main() {
       window.draw(ship.model_sprite);
       window.draw(ship_2.model_sprite);
     }
-<<<<<<< HEAD
     window.draw(asteroid.model_sprite);
-||||||| merged common ancestors
-
-    bullet.draw(window);
-    bullet_2.draw(window);
-=======
-
->>>>>>> faeab422a0f882aeeaddd067449b190ea547498f
     window.draw(text);
 
     //отрисовка окна
     window.display();
   }
+}
   return 0;
 }
