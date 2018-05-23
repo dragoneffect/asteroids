@@ -7,7 +7,7 @@ const float ship_velocity = 6.f;
 class Ship : public Model {
 public:
   Vector2f velocity;
-  int ship_health = 100;
+  int ship_health = 3;
   string ship_image;
   Keyboard::Key move_left, move_right;
   bool destroyed = false; //определяет, разрушен ли корабль или нет

@@ -1,12 +1,13 @@
 #include "../include/global.h"
-#include "../include/menu.h"
 #include "../include/bullet.h"
+#include "../include/const.h"
+#include "../include/menu.h"
 //#include "../include/Model.h"
 #include "../include/Ship.h"
 #include "../include/assistant.h"
 //#include "../include/bullet.h"
 #include "../include/Asteroids.h"
-
+#include "../include/interface.h"
 
 bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
   if (ship1.destroyed && ship2.destroyed) {
@@ -27,15 +28,9 @@ bool first_to_draw(Ship ship, Ship ship_2) {
     return true;
 }
 
-
 int main() {
   int count = 0;
-  sf::Font font;
-  if (!font.loadFromFile("font.ttf")) {
-    return -1;
-  }
-  sf::Text text;
-  text.setFont(font);
+
   Model map("background.png");
   //изначальная позиция кораблей
   Ship ship(start_x_blue, start_ship_y, "pl1.png", Keyboard::Left,
@@ -75,10 +70,9 @@ int main() {
       std::cout << restarting_time << "\n";
       ability_red = true;
       restarting_time = 0;
-      if (ability_red) {
-        if (red_time <= 5) {
-          red_time = 5;
-        }
+
+      if (red_time <= 5) {
+        red_time = 5;
       }
       std::cout << red_time << "\n";
     }
@@ -91,7 +85,7 @@ int main() {
         menu(window, menu_running);
       }
     }
-    std::stringstream st;
+    //  std::stringstream st;
     window.clear();
     window.draw(map.model_sprite);
     window.setVerticalSyncEnabled(true);
@@ -104,9 +98,26 @@ int main() {
       bullet_2.update();
       asteroid.update();
       if (bullet.destroyed) {
-        bullet.model_sprite.setPosition(ship.x() + ship_blue_width,ship.y());
+        bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
         bullet.update();
-    }
+      }
+
+      if (bullet.half) {
+        bullet_2.update();
+      }
+      if (bullet_2.destroyed) {
+        bullet_2.model_sprite.setPosition(ship_2.x() + ship_red_width,
+                                          ship_2.y());
+      }
+      if (asteroid.destroyed) {
+        asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
+      }
+      if (bullet.half) {
+        bullet_2.update();
+      }
+      if (bullet_2.destroyed) {
+        bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
+      }
 
       if (event.key.code == sf::Keyboard::Space) {
         if (ability_red) {
@@ -116,21 +127,9 @@ int main() {
           ability_red_use = false;
         }
       }
-      if (bullet.half)
-        bullet_2.update();
-      if (bullet_2.destroyed) {
-        bullet_2.model_sprite.setPosition(ship_2.x() + ship_red_width, ship_2.y());
-      }
-      if(asteroid.destroyed)
-         asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
-      if (bullet.half)
-        bullet_2.update();
-      if (bullet_2.destroyed) {
-        bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
-                                           ship.y());
 
       if (ability_red_use) {
-        if (red_time > 0) {
+        if (red_time >= 0) {
           assist.update();
           window.draw(assist.model_sprite);
           red_time -= time;
@@ -144,15 +143,15 @@ int main() {
         bullet.update();
         bullet.draw(window);
         if (bullet.destroyed) {
-          bullet.model_sprite.setPosition(ship.x() + ship_blue_width,
-                                           ship.y());
+          bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
         }
-        if (bullet.half)
+        if (bullet.half) {
           bullet_2.update();
           bullet_2.draw(window);
+        }
         if (bullet_2.destroyed) {
           bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
-                                             ship.y());
+                                            ship.y());
         }
       }
       if (!ship_2.destroyed) {
@@ -160,24 +159,23 @@ int main() {
         bullet_3.draw(window);
         if (bullet_3.destroyed) {
           bullet_3.model_sprite.setPosition(ship_2.x() + ship_red_width,
-                                             ship_2.y());
+                                            ship_2.y());
         }
-        if (bullet_3.half)
+        if (bullet_3.half) {
           bullet_4.update();
-        bullet_4.draw(window);
+          bullet_4.draw(window);
+        }
         if (bullet_4.destroyed) {
           bullet_4.model_sprite.setPosition(ship_2.x() + ship_red_width,
-                                             ship_2.y());
+                                            ship_2.y());
         }
       }
     }
-    //вывод счета на экран
-    st << count;
-    text.setString(st.str());
 
     bullet.draw(window);
     bullet_2.draw(window);
 
+    interface(window, ship, ship_2, count);
 
     if (first_to_draw(ship, ship_2))
       firstToDraw = 1 - firstToDraw;
@@ -190,11 +188,10 @@ int main() {
       window.draw(ship_2.model_sprite);
     }
     window.draw(asteroid.model_sprite);
-    window.draw(text);
 
     //отрисовка окна
     window.display();
   }
-}
-  return 0;
+
+return 0;
 }
