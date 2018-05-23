@@ -3,8 +3,6 @@
 
 //константы размера окна
 const int windowWidth = 800, windowHeight = 600;
-//изначальное количество землян.
-const long long int earthlings = 10000000000;
 //минимальное количество выживших
 const long long int min_survivors = 2000000000;
 //ширина кораблей/2

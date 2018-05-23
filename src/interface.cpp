@@ -1,11 +1,12 @@
 #include "../include/global.h"
 #include "../include/Ship.h"
 
-
-int interface(RenderWindow &window, Ship ship, Ship ship2, int count) {
+int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
+              long long int earthlings, long long int survived) {
   Image red_image, blue_image, x_image, life_image, life2_image;
   Texture red_texture, blue_texture, x_texture, life_texture, life2_texture;
-  Sprite red_sprite, blue_sprite, x1_sprite, x2_sprite, life_sprite, life2_sprite;
+  Sprite red_sprite, blue_sprite, x1_sprite, x2_sprite, life_sprite,
+      life2_sprite;
 
   red_image.loadFromFile("images/pl2_little.png");
   red_image.createMaskFromColor(Color(0, 0, 0));
@@ -54,9 +55,9 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count) {
   life2_sprite.setTexture(life2_texture);
   life2_sprite.setPosition(759, 16);
 
-  sf::Text text_score;
+  sf::Text text_score, text_left, text_people, text_surv;
   sf::Font font;
-  std::stringstream st_score;
+  std::stringstream st_score, st_left, st_surv;
 
   if (!font.loadFromFile("font.ttf")) {
     return -1;
@@ -68,6 +69,26 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count) {
   text_score.setCharacterSize(22);
   text_score.setPosition(350, 5);
   window.draw(text_score);
+
+  text_left.setFont(font);
+  st_left <<  earthlings / 1000000000 << "b on earth";
+  text_left.setString(st_left.str());
+  text_left.setCharacterSize(22);
+  text_left.setPosition(10, 50);
+  window.draw(text_left);
+
+  text_surv.setFont(font);
+  if (survived / 1000000000 > 0) {
+    st_surv << survived / 1000000000 << "b left";
+  } else if (survived == 0) {
+    st_surv  << 0 << " left";
+  } else {
+    st_surv << survived / 100000000 << "m left";
+  }
+  text_surv.setString(st_surv.str());
+  text_surv.setCharacterSize(22);
+  text_surv.setPosition(690, 50);
+  window.draw(text_surv);
 
   if (!ship2.destroyed) {
     window.draw(life_sprite);

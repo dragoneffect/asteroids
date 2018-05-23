@@ -1,6 +1,6 @@
+#include "../include/const.h"
 #include "../include/global.h"
 #include "../include/bullet.h"
-#include "../include/const.h"
 #include "../include/menu.h"
 //#include "../include/Model.h"
 #include "../include/Ship.h"
@@ -29,7 +29,11 @@ bool first_to_draw(Ship ship, Ship ship_2) {
 }
 
 int main() {
+  //счет
   int count = 0;
+  //изначальное количество землян.
+  long long int earthlings = 10000000000;
+  long long int survived = 0;
 
   Model map("background.png");
   //изначальная позиция кораблей
@@ -40,7 +44,7 @@ int main() {
                    Keyboard::Space);
 
   Bullet bullet(ship.x() + ship_blue_width, ship.y(), "bullet.png");
-  Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
+  Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet.png");
   srand(time(NULL));
   Asteroid asteroid((float)rand() / RAND_MAX * 600, 0, "asteroid.png");
 
@@ -79,10 +83,18 @@ int main() {
 
     while (window.pollEvent(event)) {
       //открываем меню по нажатию Esc
-      if (event.type == sf::Event::KeyPressed &&
-          event.key.code == sf::Keyboard::Escape) {
-        menu_running = false;
-        menu(window, menu_running);
+      if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Escape) {
+          menu_running = false;
+          menu(window, menu_running);
+        } else if (event.key.code == sf::Keyboard::Space) {
+          if (ability_red) {
+            ability_red_use = true;
+            ability_red = false;
+          } else {
+            ability_red_use = false;
+          }
+        }
       }
     }
     //  std::stringstream st;
@@ -94,38 +106,10 @@ int main() {
     if (is_it_the_end(ship, ship_2, earthlings)) {
       ship.update();
       ship_2.update();
-      bullet.update();
-      bullet_2.update();
       asteroid.update();
-      if (bullet.destroyed) {
-        bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
-        bullet.update();
-      }
 
-      if (bullet.half) {
-        bullet_2.update();
-      }
-      if (bullet_2.destroyed) {
-        bullet_2.model_sprite.setPosition(ship_2.x() + ship_red_width,
-                                          ship_2.y());
-      }
       if (asteroid.destroyed) {
         asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
-      }
-      if (bullet.half) {
-        bullet_2.update();
-      }
-      if (bullet_2.destroyed) {
-        bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
-      }
-
-      if (event.key.code == sf::Keyboard::Space) {
-        if (ability_red) {
-          ability_red_use = true;
-          ability_red = false;
-        } else {
-          ability_red_use = false;
-        }
       }
 
       if (ability_red_use) {
@@ -141,7 +125,28 @@ int main() {
 
       if (!ship.destroyed) {
         bullet.update();
+        bullet_2.update();
+        bullet.update();
         bullet.draw(window);
+        if (bullet.destroyed) {
+          bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
+          bullet.update();
+        }
+
+        if (bullet.half) {
+          bullet_2.update();
+        }
+        if (bullet.half) {
+          bullet_2.update();
+        }
+        if (bullet_2.destroyed) {
+          bullet_2.model_sprite.setPosition(ship_2.x() + ship_red_width,
+                                            ship_2.y());
+        }
+        if (bullet_2.destroyed) {
+          bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
+                                            ship.y());
+        }
         if (bullet.destroyed) {
           bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
         }
@@ -175,7 +180,7 @@ int main() {
     bullet.draw(window);
     bullet_2.draw(window);
 
-    interface(window, ship, ship_2, count);
+    interface(window, ship, ship_2, count, earthlings, survived);
 
     if (first_to_draw(ship, ship_2))
       firstToDraw = 1 - firstToDraw;
@@ -193,5 +198,5 @@ int main() {
     window.display();
   }
 
-return 0;
+  return 0;
 }
