@@ -2,6 +2,7 @@
 #define SHIP_H
 
 #include "Model.h"
+const float ship_velocity = 6.f;
 
 class Ship : public Model {
 public:
@@ -27,7 +28,7 @@ public:
       velocity.x = -ship_velocity;
     //аналогично здесь
     else if (Keyboard::isKeyPressed(move_right) &&
-             !Keyboard::isKeyPressed(move_left) && x() < 764)
+             !Keyboard::isKeyPressed(move_left) && x() < 750)
       velocity.x = ship_velocity;
     //если ничего не нажато, корабль не двигается
     else
