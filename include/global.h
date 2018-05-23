@@ -22,7 +22,7 @@ float ship_red_width = 55 / 2 - 4;
 int start_x_blue = windowWidth / 2;
 int start_x_red = (windowWidth / 2) - 60;
 int start_ship_y = windowHeight - 80;
-
+int start_y_assist = windowHeight - 60;
 int firstToDraw = 0;
 
 
