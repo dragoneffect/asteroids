@@ -9,8 +9,24 @@
 #include "../include/Asteroids.h"
 #include "../include/interface.h"
 
-bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
+bool is_it_the_end(RenderWindow &window, Ship ship1, Ship ship2,
+                   long long int people) {
+  sf::Text text;
+  sf::Font font;
+  std::stringstream st;
+  if (!font.loadFromFile("font.ttf")) {
+    return -1;
+  }
+  text.setFont(font);
+
   if (ship1.destroyed && ship2.destroyed) {
+    st << "\t\t\t\tgame over"
+       << "\n"
+       << "both of your ships destroyed";
+    text.setString(st.str());
+    text.setCharacterSize(30);
+    text.setPosition(170, 270);
+    window.draw(text);
     return false;
   }
   if (people < min_survivors) {
@@ -117,9 +133,14 @@ int main() {
     window.setVerticalSyncEnabled(true);
     // bool fl = true;
 
-    if (is_it_the_end(ship, ship_2, earthlings)) {
-      ship.update();
-      ship_2.update();
+    if (is_it_the_end(window, ship, ship_2, earthlings)) {
+      survived += 100000;
+      earthlings -= 100000;
+      std::cout << survived << "\n";
+
+      //  Collision(ship, asteroid);
+      Collision(ship_2, asteroid);
+
       asteroid.update();
 
       if (asteroid.destroyed) {
@@ -138,6 +159,7 @@ int main() {
       }
 
       if (!ship.destroyed) {
+        ship.update();
         bullet.update();
         bullet.draw(window);
         if (bullet.destroyed) {
@@ -154,6 +176,7 @@ int main() {
         }
       }
       if (!ship_2.destroyed) {
+        ship_2.update();
         bullet_3.update();
         bullet_3.update();
         bullet_3.draw(window);
@@ -173,10 +196,7 @@ int main() {
       }
     }
 
-    Collision(ship, asteroid);
-    Collision(ship_2, asteroid);
-
-    interface(window, ship, ship_2, count, earthlings, survived);
+    interface(window, ship, ship_2, count, earthlings, survived, red_time);
 
     if (first_to_draw(ship, ship_2))
       firstToDraw = 1 - firstToDraw;
