@@ -44,9 +44,9 @@ bool first_to_draw(Ship ship, Ship ship_2) {
     return true;
 }
 
-bool isIntersecting(Ship ship, Asteroid asteroid) {
-  return ship.right() >= asteroid.left() && ship.left() <= asteroid.right() &&
-         ship.bottom() >= asteroid.top() && ship.top() <= asteroid.bottom();
+template <class T1, class T2> bool isIntersecting(T1 &object, T2 &asteroid) {
+  return object.right() >= asteroid.left() && object.left() <= asteroid.right() &&
+         object.bottom() >= asteroid.top() && object.top() <= asteroid.bottom();
 }
 
 void Collision(Ship &ship, Asteroid &asteroid) {
@@ -57,6 +57,14 @@ void Collision(Ship &ship, Asteroid &asteroid) {
   //иначе разрушаем астероид, отнимаем одну жизнь у корабля
   asteroid.destroyed = true;
   ship.ship_health--;
+}
+
+void Collision(Bullet &bullet, Asteroid &asteroid) {
+  if (!isIntersecting(bullet, asteroid)) {
+    return;
+  }
+  asteroid.destroyed = true;
+  bullet.destroyed = true;
 }
 
 int main() {
@@ -78,6 +86,8 @@ int main() {
   Bullet bullet_2(ship.x() + ship_blue_width, ship.y(), "bullet.png");
   Bullet bullet_3(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_4(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
+  Bullet bullet_5(assist.x() + ship_assist_width, assist.y(),
+                  "bullet_green.png");
   srand(time(NULL));
   Asteroid asteroid((float)rand() / RAND_MAX * 600, 0, "asteroid.png");
 
@@ -131,6 +141,7 @@ int main() {
     window.clear();
     window.draw(map.model_sprite);
     window.setVerticalSyncEnabled(true);
+    interface(window, ship, ship_2, count, earthlings, survived, red_time);
     // bool fl = true;
 
     if (is_it_the_end(window, ship, ship_2, earthlings)) {
@@ -140,22 +151,17 @@ int main() {
 
       //  Collision(ship, asteroid);
       Collision(ship_2, asteroid);
+      Collision(bullet, asteroid);
+      Collision(bullet_2, asteroid);
+      Collision(bullet_3, asteroid);
+      Collision(bullet_4, asteroid);
 
       asteroid.update();
 
       if (asteroid.destroyed) {
         asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
-      }
-
-      if (ability_red_use) {
-        if (red_time >= 0) {
-          assist.update();
-          window.draw(assist.model_sprite);
-          red_time -= time;
-          std::cout << red_time << "\n";
-        }
-        if (red_time <= 0)
-          ability_red_use = false;
+        asteroid.destroyed = false;
+        count += 10;
       }
 
       if (!ship.destroyed) {
@@ -164,6 +170,7 @@ int main() {
         bullet.draw(window);
         if (bullet.destroyed) {
           bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
+          bullet.destroyed = false;
         }
 
         if (bullet.half) {
@@ -173,6 +180,7 @@ int main() {
         if (bullet_2.destroyed) {
           bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
                                             ship.y());
+          bullet_2.destroyed = false;
         }
       }
       if (!ship_2.destroyed) {
@@ -180,9 +188,30 @@ int main() {
         bullet_3.update();
         bullet_3.update();
         bullet_3.draw(window);
+
+        if (ability_red_use) {
+          if (red_time >= 0) {
+            assist.update();
+            bullet_5.update();
+            bullet_5.update();
+            bullet_5.update();
+            bullet_5.draw(window);
+            window.draw(assist.model_sprite);
+            Collision(bullet_5, asteroid);
+            red_time -= time;
+            if (bullet_5.destroyed) {
+              bullet_5.model_sprite.setPosition(assist.x() + ship_assist_width,
+                                                assist.y());
+              bullet_5.destroyed = false;
+            }
+          }
+          if (red_time <= 0)
+            ability_red_use = false;
+        }
         if (bullet_3.destroyed) {
           bullet_3.model_sprite.setPosition(ship_2.x() + ship_red_width,
                                             ship_2.y());
+          bullet_3.destroyed = false;
         }
         if (bullet_3.half) {
           bullet_4.update();
@@ -192,11 +221,10 @@ int main() {
         if (bullet_4.destroyed) {
           bullet_4.model_sprite.setPosition(ship_2.x() + ship_red_width,
                                             ship_2.y());
+          bullet_4.destroyed = false;
         }
       }
     }
-
-    interface(window, ship, ship_2, count, earthlings, survived, red_time);
 
     if (first_to_draw(ship, ship_2))
       firstToDraw = 1 - firstToDraw;

@@ -13,24 +13,24 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   red_image.createMaskFromColor(Color(0, 0, 0));
   red_texture.loadFromImage(red_image);
   red_sprite.setTexture(red_texture);
-  red_sprite.setPosition(25, 32);
+  red_sprite.setPosition(25, 532);
   red_sprite.setRotation(45);
 
   blue_image.loadFromFile("images/pl1_little.png");
   blue_image.createMaskFromColor(Color(0, 0, 0));
   blue_texture.loadFromImage(blue_image);
   blue_sprite.setTexture(blue_texture);
-  blue_sprite.setPosition(720, 34);
+  blue_sprite.setPosition(720, 534);
   blue_sprite.setRotation(45);
 
   x_image.loadFromFile("images/x.png");
   x_image.createMaskFromColor(Color(0, 0, 0));
   x_texture.loadFromImage(x_image);
   x1_sprite.setTexture(x_texture);
-  x1_sprite.setPosition(45, 47);
+  x1_sprite.setPosition(45, 547);
 
   x2_sprite.setTexture(x_texture);
-  x2_sprite.setPosition(734, 52);
+  x2_sprite.setPosition(734, 552);
 
   if (ship2.ship_health == 1) {
     life_image.loadFromFile("images/1.png");
@@ -44,7 +44,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   life_image.createMaskFromColor(Color(0, 0, 0));
   life_texture.loadFromImage(life_image);
   life_sprite.setTexture(life_texture);
-  life_sprite.setPosition(70, 46);
+  life_sprite.setPosition(70, 546);
 
   if (ship.ship_health == 1) {
     life2_image.loadFromFile("images/1.png");
@@ -58,7 +58,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   life2_image.createMaskFromColor(Color(0, 0, 0));
   life2_texture.loadFromImage(life2_image);
   life2_sprite.setTexture(life2_texture);
-  life2_sprite.setPosition(759, 51);
+  life2_sprite.setPosition(759, 551);
 
   sf::Text text_score, text_left, text_people, text_surv, text_red;
   sf::Font font;
@@ -99,7 +99,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   st_red << "ability";
   text_red.setString(st_red.str());
   text_red.setCharacterSize(20);
-  text_red.setPosition(15, 80);
+  text_red.setPosition(15, 575);
   if (!ship2.destroyed) {
     if (red_time == 5) {
       text_red.setColor(sf::Color::Red);

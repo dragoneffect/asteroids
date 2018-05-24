@@ -11,7 +11,6 @@ public:
       : Bullet(X, Y, asteroid_image) {}
 
   void update() {
-      destroyed = false;
     if (model_sprite.getPosition().y < 600 && (!destroyed)) {
       model_sprite.move(velocity);
       velocity.y = asteroid_velocity;
