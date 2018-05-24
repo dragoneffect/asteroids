@@ -20,9 +20,9 @@ public:
   }
   float x() { return model_sprite.getPosition().x; }
   float y() { return model_sprite.getPosition().y; }
-  float left() { return x() - 20; }
-  float right() { return x() + 20; }
-  float top() { return y() - 52; }
-  float bottom() { return y() + 52; }
+  float left() { return x() - model_texture.getSize().x/2; }
+  float right() { return x() + model_texture.getSize().x/2; }
+  float top() { return y() - model_texture.getSize().y/2; }
+  float bottom() { return y() + model_texture.getSize().y/2; }
 };
 #endif

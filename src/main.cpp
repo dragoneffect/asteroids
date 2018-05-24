@@ -59,12 +59,11 @@ int main() {
                    Keyboard::Space);
 
   Bullet bullet(ship.x() + ship_blue_width, ship.y(), "bullet.png");
-  Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet.png");
-  srand(time(NULL));
-  Asteroid asteroid((float)rand() / RAND_MAX * 600, 0, "asteroid.png");
-
+  Bullet bullet_2(ship.x() + ship_blue_width, ship.y(), "bullet.png");
   Bullet bullet_3(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_4(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
+  srand(time(NULL));
+  Asteroid asteroid((float)rand() / RAND_MAX * 600, 0, "asteroid.png");
 
   bool menu_running = true;
 
@@ -112,7 +111,7 @@ int main() {
         }
       }
     }
-    //  std::stringstream st;
+
     window.clear();
     window.draw(map.model_sprite);
     window.setVerticalSyncEnabled(true);
@@ -140,31 +139,11 @@ int main() {
 
       if (!ship.destroyed) {
         bullet.update();
-        bullet_2.update();
-        bullet.update();
         bullet.draw(window);
         if (bullet.destroyed) {
           bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
-          bullet.update();
         }
 
-        if (bullet.half) {
-          bullet_2.update();
-        }
-        if (bullet.half) {
-          bullet_2.update();
-        }
-        if (bullet_2.destroyed) {
-          bullet_2.model_sprite.setPosition(ship_2.x() + ship_red_width,
-                                            ship_2.y());
-        }
-        if (bullet_2.destroyed) {
-          bullet_2.model_sprite.setPosition(ship.x() + ship_blue_width,
-                                            ship.y());
-        }
-        if (bullet.destroyed) {
-          bullet.model_sprite.setPosition(ship.x() + ship_blue_width, ship.y());
-        }
         if (bullet.half) {
           bullet_2.update();
           bullet_2.draw(window);
@@ -176,12 +155,14 @@ int main() {
       }
       if (!ship_2.destroyed) {
         bullet_3.update();
+        bullet_3.update();
         bullet_3.draw(window);
         if (bullet_3.destroyed) {
           bullet_3.model_sprite.setPosition(ship_2.x() + ship_red_width,
                                             ship_2.y());
         }
         if (bullet_3.half) {
+          bullet_4.update();
           bullet_4.update();
           bullet_4.draw(window);
         }
@@ -192,9 +173,6 @@ int main() {
       }
     }
 
-    bullet.draw(window);
-    bullet_2.draw(window);
-    
     Collision(ship, asteroid);
     Collision(ship_2, asteroid);
 
