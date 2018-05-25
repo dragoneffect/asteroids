@@ -12,7 +12,7 @@ build/main.o: src/main.cpp
 	 $(OBJ) -std=c++11
 
 build/menu.o: src/menu.cpp
-	$(OBJ) 
+	$(OBJ) -std=c++11
 
 build/interface.o: src/interface.cpp
 	$(OBJ) -std=c++11

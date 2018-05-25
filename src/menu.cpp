@@ -1,40 +1,18 @@
 #include "../include/menu.h"
+#include "../include/gui.h"
+#include <list>
 
 bool menu(RenderWindow &window, bool running) {
-  Image buttn1_image;
-  Texture buttn1_texture;
-  Sprite buttn1_sprite, buttn2_sprite, buttn3_sprite, buttn4_sprite;
 
-  //первая кнопка
-  buttn1_image.loadFromFile("images/button.png");
-  buttn1_image.createMaskFromColor(Color(0, 0, 0));
-  buttn1_texture.loadFromImage(buttn1_image);
-  buttn1_sprite.setTexture(buttn1_texture);
-  buttn1_sprite.setPosition(300, 150);
+  list<Gui> buttons;
 
-  //вторая кнопка
-  buttn2_sprite.setTexture(buttn1_texture);
-  buttn2_sprite.setPosition(300, 220);
-
-  //третья кнопка
-  buttn3_sprite.setTexture(buttn1_texture);
-  buttn3_sprite.setPosition(300, 290);
-
-  //четвертая кнопка
-  buttn4_sprite.setTexture(buttn1_texture);
-  buttn4_sprite.setPosition(300, 360);
-
-  //делаем их полупрозрачными
-  buttn1_sprite.setColor(sf::Color(255, 255, 255, 128));
-  buttn2_sprite.setColor(sf::Color(255, 255, 255, 128));
-  buttn3_sprite.setColor(sf::Color(255, 255, 255, 128));
-  buttn4_sprite.setColor(sf::Color(255, 255, 255, 128));
+  for (int i = 0, j = 150; i < 4; i++, j += 70) {
+    buttons.emplace_back(300, j, "button.png");
+  }
 
   //шрифт для строк и сами строки
   sf::Font font;
-  if (!font.loadFromFile("font.ttf")) {
-    return -1;
-  }
+  font.loadFromFile("font.ttf");
 
   sf::Text text_start, text_rules, text_records, text_exit;
 
@@ -128,10 +106,10 @@ bool menu(RenderWindow &window, bool running) {
     window.draw(text_records);
     window.draw(text_exit);
 
-    window.draw(buttn1_sprite);
-    window.draw(buttn2_sprite);
-    window.draw(buttn3_sprite);
-    window.draw(buttn4_sprite);
+    for (auto &button : buttons) {
+      button.model_sprite.setColor(sf::Color(255, 255, 255, 128));
+      window.draw(button.model_sprite);
+    }
 
     window.display();
   }
