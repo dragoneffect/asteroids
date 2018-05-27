@@ -1,38 +1,22 @@
 #include "../include/const.h"
 #include "../include/global.h"
-#include "../include/bullet.h"
 #include "../include/menu.h"
 //#include "../include/Model.h"
+#include "../include/Asteroids.h"
+#include "../include/Draw.h"
 #include "../include/Ship.h"
 #include "../include/assistant.h"
-//#include "../include/bullet.h"
-#include "../include/Asteroids.h"
+#include "../include/bullet.h"
 #include "../include/interface.h"
 
-bool is_it_the_end(RenderWindow &window, Ship ship1, Ship ship2,
-                   long long int people) {
-  sf::Text text;
-  sf::Font font;
-  std::stringstream st;
-  if (!font.loadFromFile("font.ttf")) {
-    return -1;
-  }
-  text.setFont(font);
-
+bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
   if (ship1.destroyed && ship2.destroyed) {
-    st << "\t\t\t\tgame over"
-       << "\n"
-       << "both of your ships destroyed";
-    text.setString(st.str());
-    text.setCharacterSize(30);
-    text.setPosition(170, 270);
-    window.draw(text);
-    return false;
+    return true;
   }
   if (people < min_survivors) {
-    return false;
+    return true;
   }
-  return true;
+  return false;
 }
 
 bool first_to_draw(Ship ship, Ship ship_2) {
@@ -82,6 +66,7 @@ int main() {
   Ship ship(start_x_blue, start_ship_y, "pl1.png", Keyboard::Left,
             Keyboard::Right);
   Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D);
+
   Assistant assist(start_x_assist, start_y_assist, "assistant.png",
                    Keyboard::Space);
 
@@ -89,16 +74,8 @@ int main() {
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_3(ship.x() + ship_blue_width, ship.y(), "bullet.png");
 
-  vector<Bullet> bullets_red, bullets_blue;
-  for (int i = 0; i < 2; i++) {
-    bullets_red.push_back(bullet_2);
-    //  bullets_red.emplace_back((ship_2.x() + ship_red_width), (ship_2.y() *
-    //  i), "bullet_red.png");
-    bullets_blue.push_back(bullet_3);
-  }
-
   srand(time(NULL));
-  Asteroid asteroid((float)rand() / RAND_MAX * 600, 0, "asteroid.png");
+  Asteroid asteroid((float)rand() / RAND_MAX * 800, 0, "asteroid.png");
 
   bool menu_running = true;
 
@@ -107,6 +84,7 @@ int main() {
   float red_time = -1;
   bool ability_red = false;
   bool ability_red_use = false;
+  sf::Draw draw_obj;
 
   //открытие окна
   sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
@@ -120,29 +98,31 @@ int main() {
     restarting_time += time;
 
     if (restarting_time > 10 && red_time != 5) {
-      std::cout << restarting_time << "\n";
+      cout << restarting_time << "\n";
       ability_red = true;
       restarting_time = 0;
 
-      if (red_time <= 5) {
+      if (red_time < 5) {
         red_time = 5;
       }
-      std::cout << red_time << "\n";
+      cout << red_time << "\n";
     }
 
     while (window.pollEvent(event)) {
       //открываем меню по нажатию Esc
       if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Escape) {
+        switch (event.key.code) {
+        case sf::Keyboard::Escape:
           menu_running = false;
           menu(window, menu_running);
-        } else if (event.key.code == sf::Keyboard::Space) {
+          break;
+        case sf::Keyboard::Space:
           if (ability_red) {
             ability_red_use = true;
             ability_red = false;
-          } else {
-            ability_red_use = false;
           }
+          break;
+          // case sf::Keyboard::Return:
         }
       }
     }
@@ -151,13 +131,26 @@ int main() {
     window.draw(map.model_sprite);
     window.setVerticalSyncEnabled(true);
     interface(window, ship, ship_2, count, earthlings, survived, red_time);
-    // bool fl = true;
+    if (is_it_the_end(ship, ship_2, earthlings)) {
+      sf::Text text;
+      sf::Font font;
+      std::stringstream st;
+      if (!font.loadFromFile("font.ttf")) {
+        return -1;
+      }
+      text.setFont(font);
+      st << "\tgame over";
+      text.setString(st.str());
+      text.setCharacterSize(30);
+      text.setPosition(270, 270);
+      window.draw(text);
+    }
 
-    if (is_it_the_end(window, ship, ship_2, earthlings)) {
+    else {
       survived += 100000;
       earthlings -= 100000;
       asteroid.update();
-      if (asteroid.y() >= 599) {
+      if (asteroid.y() >= windowHeight) {
         earthlings -= 100000000;
       }
       if (asteroid.destroyed) {
@@ -166,68 +159,44 @@ int main() {
       }
       if (!ship.destroyed) {
         ship.update();
-        //    Collision(ship, asteroid, count);
-        for (auto &bullet : bullets_blue) {
-          bullet.update();
-          bullet.update();
-          bullet.draw(window);
-          if (bullet.destroyed) {
-            bullet.model_sprite.setPosition(ship.x() + ship_blue_width,
-                                            ship.y());
-            bullet.destroyed = false;
-          }
-          Collision(bullet, asteroid, count);
-        }
+        Collision(ship, asteroid, count);
       }
+      draw_obj.Draw_object(window, bullet_3.destroyed, bullet_3.model_sprite);
+      bullet_3.update();
+      bullet_3.update();
+      draw_obj.Bullet_position(ship.x() + ship_blue_width, ship.y(), bullet_3,
+                               ship.destroyed);
+      Collision(bullet_3, asteroid, count);
       if (!ship_2.destroyed) {
         ship_2.update();
         Collision(ship_2, asteroid, count);
-        for (auto &bullet : bullets_red) {
+      }
+      draw_obj.Draw_object(window, bullet_2.destroyed, bullet_2.model_sprite);
+      bullet_2.update();
+      bullet_2.update();
+      bullet_2.update();
+      draw_obj.Bullet_position(ship_2.x() + ship_red_width, ship_2.y(),
+                               bullet_2, ship_2.destroyed);
+      Collision(bullet_2, asteroid, count);
+      if (ability_red_use) {
+        if (red_time >= 0) {
+          assist.update();
           bullet.update();
           bullet.update();
           bullet.update();
           bullet.draw(window);
-          if (bullet.destroyed) {
-            bullet.model_sprite.setPosition(ship_2.x() + ship_red_width,
-                                            ship_2.y());
-            bullet.destroyed = false;
-          }
+          window.draw(assist.model_sprite);
           Collision(bullet, asteroid, count);
-        }
-        if (ability_red_use) {
-          if (red_time >= 0) {
-            assist.update();
-            bullet.update();
-            bullet.update();
-            bullet.update();
-            bullet.draw(window);
-            window.draw(assist.model_sprite);
-            Collision(bullet, asteroid, count);
-            red_time -= time;
-            if (bullet.destroyed) {
-              bullet.model_sprite.setPosition(assist.x() + ship_assist_width,
-                                              assist.y());
-              bullet.destroyed = false;
-            }
-          }
-          if (red_time <= 0)
-            ability_red_use = false;
-        }
+          red_time -= time;
+          draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
+                                   bullet, assist.destroyed);
+        } else
+          ability_red_use = false;
       }
+      draw_obj.Draw_object(window, ship.destroyed, ship.model_sprite);
+      draw_obj.Draw_object(window, ship_2.destroyed, ship_2.model_sprite);
+      draw_obj.Draw_object(window, asteroid.destroyed, asteroid.model_sprite);
     }
-
-    if (first_to_draw(ship, ship_2))
-      firstToDraw = 1 - firstToDraw;
-
-    if (firstToDraw) {
-      window.draw(ship_2.model_sprite);
-      window.draw(ship.model_sprite);
-    } else {
-      window.draw(ship.model_sprite);
-      window.draw(ship_2.model_sprite);
-    }
-    window.draw(asteroid.model_sprite);
-
     //отрисовка окна
     window.display();
   }

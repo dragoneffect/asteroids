@@ -2,9 +2,9 @@
 #define BULLET_H
 
 #include "Model.h"
-const float bullet_velocity = 18.f;
+const float bullet_velocity = 15.f;
 
-class Bullet : public Model{
+class Bullet : public Model {
 public:
   Vector2f velocity;
   string bullet_image;
@@ -21,25 +21,21 @@ public:
 
     if (y() < 0) {
       destroyed = true;
-    }
-    else if (y() > 0) {
+    } else
       destroyed = false;
-    }
     if (y() <= 300) {
       half = true;
     }
   }
 
-  void draw(sf::RenderWindow &window) {
-    window.draw(model_sprite);
-  }
+  void draw(sf::RenderWindow &window) { window.draw(model_sprite); }
 
   float x() { return model_sprite.getPosition().x; }
   float y() { return model_sprite.getPosition().y; }
-  float left() { return x() - model_texture.getSize().x/2; }
-  float right() { return x() + model_texture.getSize().x/2; }
-  float top() { return y() - model_texture.getSize().y/2; }
-  float bottom() { return y() + model_texture.getSize().y/2; }
+  float left() { return x() - model_texture.getSize().x / 2; }
+  float right() { return x() + model_texture.getSize().x / 2; }
+  float top() { return y() - model_texture.getSize().y / 2; }
+  float bottom() { return y() + model_texture.getSize().y / 2; }
 };
 
 #endif

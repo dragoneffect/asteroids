@@ -11,11 +11,11 @@ public:
       : Bullet(X, Y, asteroid_image) {}
 
   void update() {
-    if (model_sprite.getPosition().y < 600 && (!destroyed)) {
+    if (y() < windowHeight && !destroyed) {
       model_sprite.move(velocity);
       velocity.y = asteroid_velocity;
     }
-    if(y() == 600) destroyed = true;
+    else destroyed = true;
   }
   float x() { return model_sprite.getPosition().x; }
   float y() { return model_sprite.getPosition().y; }

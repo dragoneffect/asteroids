@@ -7,7 +7,7 @@ CXXFLAGS= -L SFML\lib -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -l
 
 default: asteroids
 
-asteroids: build/main.o build/menu.o 
+asteroids: build/main.o build/menu.o build/interface.o
 	$(CC) $^ -o $@ $(CXXFLAGS) 
 
 build/main.o: src/main.cpp
@@ -16,6 +16,9 @@ build/main.o: src/main.cpp
 
 build/menu.o: src/menu.cpp
 	$(OBJ) 
+
+build/interface.o: src/interface.cpp
+	$(OBJ) -std=c++11
 
 clean:
 	rm -f build/*.o
