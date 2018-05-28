@@ -122,6 +122,7 @@ int main() {
             ability_red = false;
           }
           break;
+          default: break;
           // case sf::Keyboard::Return:
         }
       }
@@ -170,6 +171,21 @@ int main() {
       if (!ship_2.destroyed) {
         ship_2.update();
         Collision(ship_2, asteroid, count);
+        if (ability_red_use) {
+          if (red_time >= 0) {
+            assist.update();
+            bullet.update();
+            bullet.update();
+            bullet.update();
+            bullet.draw(window);
+            window.draw(assist.model_sprite);
+            Collision(bullet, asteroid, count);
+            red_time -= time;
+            draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
+                                     bullet, assist.destroyed);
+          } else
+            ability_red_use = false;
+        }
       }
       draw_obj.Draw_object(window, bullet_2.destroyed, bullet_2.model_sprite);
       bullet_2.update();
@@ -178,21 +194,6 @@ int main() {
       draw_obj.Bullet_position(ship_2.x() + ship_red_width, ship_2.y(),
                                bullet_2, ship_2.destroyed);
       Collision(bullet_2, asteroid, count);
-      if (ability_red_use) {
-        if (red_time >= 0) {
-          assist.update();
-          bullet.update();
-          bullet.update();
-          bullet.update();
-          bullet.draw(window);
-          window.draw(assist.model_sprite);
-          Collision(bullet, asteroid, count);
-          red_time -= time;
-          draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
-                                   bullet, assist.destroyed);
-        } else
-          ability_red_use = false;
-      }
       draw_obj.Draw_object(window, ship.destroyed, ship.model_sprite);
       draw_obj.Draw_object(window, ship_2.destroyed, ship_2.model_sprite);
       draw_obj.Draw_object(window, asteroid.destroyed, asteroid.model_sprite);

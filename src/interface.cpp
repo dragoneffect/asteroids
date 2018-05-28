@@ -35,7 +35,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   } else if (ship.ship_health == 3) {
     life2 = "3.png";
   } else {
-    life2 = "3.png";
+    life2 = "0.png";
   }
 
   Gui life2_image(759, 551, life2);
