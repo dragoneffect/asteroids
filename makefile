@@ -1,9 +1,6 @@
-
 CC=g++
-
-OBJ = $(CC) -Wall -g -DSFML_STATIC -I SFML\include -c $< -o $@ $(CXXFLAGS)
-
-CXXFLAGS= -L SFML\lib -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lopenal32 -lfreetype -lopengl32 -ljpeg -lwinmm -lgdi32
+OBJ = $(CC) -c $< -o $@ $(CXXFLAGS)
+CXXFLAGS= -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 default: asteroids
 
@@ -15,11 +12,11 @@ build/main.o: src/main.cpp
 	 $(OBJ) -std=c++11
 
 build/menu.o: src/menu.cpp
-	$(OBJ) 
+	$(OBJ) -std=c++11
 
 build/interface.o: src/interface.cpp
 	$(OBJ) -std=c++11
 
 clean:
-	rm -f build/*.o
-	rm build
+	rm -f build/*.o asteroids
+	rmdir build
