@@ -36,17 +36,26 @@ TEST(EndTestPeople, Negative) {
   EXPECT_EQ(false, is_it_the_end(ship, ship_2, people));
 }
 
-/*TEST(Intersect, Positive) {
+TEST(DrawingShips, Positive) {
   Ship ship(10, 10, "pl1.png", Keyboard::Left, Keyboard::Right);
-  Asteroid asteroid(800, 0, "asteroid.png");
-  ship.right() == 500;
-  asteroid.left() == 500;
-  ship.left() == 200;
-  asteroid.right() == 200;
-  ship.bottom() == 100;
-  asteroid.top() == 100;
-  ship.top() == 50;
-  asteroid.bottom() == 50;
+  Ship ship_2(100, 100, "pl1.png", Keyboard::Left, Keyboard::Right);
+  EXPECT_EQ(true, first_to_draw(ship, ship_2));
+}
 
+TEST(DrawingShips, Negative) {
+  Ship ship(100, 100, "pl1.png", Keyboard::Left, Keyboard::Right);
+  Ship ship_2(90, 100, "pl1.png", Keyboard::Left, Keyboard::Right);
+  EXPECT_EQ(false, first_to_draw(ship, ship_2));
+}
+
+TEST(Intersect, Positive) {
+  Ship ship(100, 100, "pl1.png", Keyboard::Left, Keyboard::Right);
+  Asteroid asteroid(100, 100, "asteroid.png");
   EXPECT_EQ(true, isIntersecting(ship, asteroid));
-} */
+}
+
+TEST(Intersect, Negative) {
+  Ship ship(600, 500, "pl1.png", Keyboard::Left, Keyboard::Right);
+  Asteroid asteroid(100, 100, "asteroid.png");
+  EXPECT_EQ(false, isIntersecting(ship, asteroid));
+}
