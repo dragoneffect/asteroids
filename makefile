@@ -2,7 +2,7 @@ CXX = g++
 OBJ = $(CC) -c $< -o $@ $(CXXFLAGS)
 CXXFLAGS = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 GFLAGS = -g -Wall -Wextra -pthread
-GTEST_DIR = thirdparty/googletest/googletest
+GTEST_DIR = thirdparty/googletest
 USER_DIR = test
 CPPFLAGS += -isystem $(GTEST_DIR)/include
 TESTS = bin/asteroids-test
@@ -10,7 +10,9 @@ GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 GTEST_SRCS_ = $(GTEST_DIR)/src/*.cc $(GTEST_DIR)/src/*.h $(GTEST_HEADERS)
 
-all: bin/asteroids $(TESTS)
+all: bin/asteroids
+
+test: $(TESTS)
 
 bin/asteroids: build/src/main.o build/src/funcs.o build/src/menu.o build/src/interface.o
 	mkdir -p bin
@@ -24,12 +26,14 @@ build/src/menu.o: src/menu.cpp
 	$(OBJ) -std=c++11
 
 build/src/funcs.o: src/funcs.cpp
+	mkdir -p build build/src
 	$(OBJ) -std=c++11
 
 build/src/interface.o: src/interface.cpp
 	$(OBJ) -std=c++11
 
 bin/asteroids-test : build/src/funcs.o build/test/main.o gtest_main.a
+	mkdir -p bin
 	$(CXX) $^ -o $@ $(CPPFLAGS) $(CXXFLAGS) $(GFLAGS) -lpthread
 
 build/test/main.o : $(USER_DIR)/main.cc

@@ -1,4 +1,4 @@
-#include "../thirdparty/googletest/googletest/include/gtest/gtest.h"
+#include "../thirdparty/googletest/include/gtest/gtest.h"
 #include "../include/global.h"
 #include "../include/funcs.h"
 #include "../include/Ship.h"
