@@ -4,7 +4,7 @@
 
 int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
               long long int earthlings, long long int survived,
-              float red_time) {
+              bool red_use) {
 
   Gui red(25, 532, "pl2_little.png");
   Gui blue(720, 534, "pl1_little.png");
@@ -44,7 +44,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   sf::Font font;
   std::stringstream st_score, st_left, st_surv, st_red;
 
-  if (!font.loadFromFile("font.ttf")) {
+  if (!font.loadFromFile("etc/font.ttf")) {
     return -1;
   }
 
@@ -63,13 +63,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   window.draw(text_left);
 
   text_surv.setFont(font);
-  if (survived / 1000000000 > 0) {
-    st_surv << survived / 1000000000 << "b left";
-  } else if (survived == 0) {
-    st_surv << 0 << " left";
-  } else {
-    st_surv << survived / 1000000 << "m left";
-  }
+  st_surv << survived / 1000000000 << "b left";
   text_surv.setString(st_surv.str());
   text_surv.setCharacterSize(20);
   text_surv.setPosition(690, 10);
@@ -81,7 +75,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   text_red.setCharacterSize(20);
   text_red.setPosition(15, 575);
   if (!ship2.destroyed) {
-    if (red_time == 5) {
+    if (red_use) {
       text_red.setColor(sf::Color::Red);
       window.draw(text_red);
     } else {

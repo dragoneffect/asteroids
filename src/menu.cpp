@@ -2,7 +2,7 @@
 #include "../include/gui.h"
 #include <list>
 
-bool menu(RenderWindow &window, bool running) {
+bool menu(RenderWindow &window, bool &running) {
 
   list<Gui> buttons;
 
@@ -12,7 +12,7 @@ bool menu(RenderWindow &window, bool running) {
 
   //шрифт для строк и сами строки
   sf::Font font;
-  font.loadFromFile("font.ttf");
+  font.loadFromFile("etc/font.ttf");
 
   sf::Text text_start, text_rules, text_records, text_exit;
 

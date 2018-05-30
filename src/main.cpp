@@ -1,7 +1,7 @@
+#include <SFML/Audio.hpp>
 #include "../include/const.h"
 #include "../include/global.h"
 #include "../include/menu.h"
-//#include "../include/Model.h"
 #include "../include/Asteroids.h"
 #include "../include/Draw.h"
 #include "../include/Ship.h"
@@ -11,55 +11,63 @@
 #include "../include/interface.h"
 
 int main() {
+  srand(time(NULL));
   //счет
   int count = 0;
   //изначальное количество землян.
   long long int earthlings = 10000000000;
   long long int survived = 0;
+  //хранение времени перезапуска способности
+  float restarting_time = 0;
+  //время, за которое способность будет длиться
+  float red_time = -1;
+  //готова ли способность красного корабля к использованию
+  bool ability_red = false;
+  //используется ли в данный момент способность или нет
+  bool ability_red_use = false;
+  bool menu_running = true;
+
+  Clock clock;
+  sf::Draw draw_obj;
+
+  sf::Music music;
+  if (!music.openFromFile("etc/main_theme.ogg")) {
+    return -1;
+  }
+  music.play();
+  music.setLoop(true);
 
   Model map("background.png");
   //изначальная позиция кораблей
   Ship ship(start_x_blue, start_ship_y, "pl1.png", Keyboard::Left,
             Keyboard::Right);
   Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D);
-
   Assistant assist(start_x_assist, start_y_assist, "assistant.png",
                    Keyboard::Space);
-
-  Bullet bullet(assist.x() + ship_assist_width, assist.y(), "bullet_green.png");
+  Bullet bullet(assist.x() + ship_assist_width, assist.y(), "bullet_assist.png");
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_3(ship.x() + ship_blue_width, ship.y(), "bullet.png");
-
-  srand(time(NULL));
   Asteroid asteroid((float)rand() / RAND_MAX * 800, 0, "asteroid.png");
-
-  bool menu_running = true;
-
-  Clock clock;
-  float restarting_time = 0;
-  float red_time = -1;
-  bool ability_red = false;
-  bool ability_red_use = false;
-  sf::Draw draw_obj;
 
   //открытие окна
   sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
                           sf::Style::Close);
+  window.setFramerateLimit(60);
   //программа работает, пока окно открыто
   while (window.isOpen()) {
     sf::Event event;
 
     float time = clock.getElapsedTime().asSeconds();
     clock.restart();
-    restarting_time += time;
 
-    if (restarting_time > 10 && red_time != 5) {
+    restarting_time += time;
+    if (restarting_time > red_restart && red_time != red_running) {
       cout << restarting_time << "\n";
       ability_red = true;
       restarting_time = 0;
 
-      if (red_time < 5) {
-        red_time = 5;
+      if (red_time < red_running) {
+        red_time = red_running;
       }
       cout << red_time << "\n";
     }
@@ -86,13 +94,12 @@ int main() {
 
     window.clear();
     window.draw(map.model_sprite);
-    window.setVerticalSyncEnabled(true);
-    interface(window, ship, ship_2, count, earthlings, survived, red_time);
+    interface(window, ship, ship_2, count, earthlings, survived, ability_red);
     if (is_it_the_end(ship, ship_2, earthlings)) {
       sf::Text text;
       sf::Font font;
       std::stringstream st;
-      if (!font.loadFromFile("font.ttf")) {
+      if (!font.loadFromFile("etc/font.ttf")) {
         return -1;
       }
       text.setFont(font);
@@ -104,8 +111,8 @@ int main() {
     }
 
     else {
-      survived += 100000;
-      earthlings -= 100000;
+      survived += 1000000;
+      earthlings -= 1000000;
       asteroid.update();
       if (asteroid.y() >= windowHeight) {
         earthlings -= 100000000;

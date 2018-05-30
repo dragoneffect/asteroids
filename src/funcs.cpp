@@ -14,9 +14,9 @@ bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
 }
 
 bool first_to_draw(Ship ship, Ship ship_2) {
-  if (ship.x() > ship_2.x() && ship.x() < ship_2.x() + 55)
+  if (ship.x() > ship_2.x() && ship.x() < ship_2.x() + shipRedW)
     return false;
-  else if (ship.x() < ship_2.x() && ship.x() > ship_2.x() - 36)
+  else if (ship.x() < ship_2.x() && ship.x() > ship_2.x() - shipBlueW)
     return false;
   else
     return true;
