@@ -2,6 +2,7 @@
 #define ASTEROIDS_H
 
 #include "bullet.h"
+#include "const.h"
 
 const float asteroid_velocity = 6.f;
 
