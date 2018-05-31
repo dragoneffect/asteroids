@@ -1,14 +1,14 @@
-#include <SFML/Audio.hpp>
-#include "../include/const.h"
 #include "../include/global.h"
-#include "../include/menu.h"
 #include "../include/Asteroids.h"
 #include "../include/Draw.h"
 #include "../include/Ship.h"
-#include "../include/funcs.h"
 #include "../include/assistant.h"
 #include "../include/bullet.h"
+#include "../include/const.h"
+#include "../include/funcs.h"
 #include "../include/interface.h"
+#include "../include/menu.h"
+#include <SFML/Audio.hpp>
 
 int main() {
   srand(time(NULL));
@@ -25,9 +25,10 @@ int main() {
   bool ability_red = false;
   //используется ли в данный момент способность или нет
   bool ability_red_use = false;
-  bool menu_running = true;
+  bool menu_running = false;
+  int cause_of_death = 0;
 
-  Clock clock;
+  //  Clock clock;
   sf::Draw draw_obj;
 
   sf::Music music;
@@ -44,7 +45,8 @@ int main() {
   Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D);
   Assistant assist(start_x_assist, start_y_assist, "assistant.png",
                    Keyboard::Space);
-  Bullet bullet(assist.x() + ship_assist_width, assist.y(), "bullet_assist.png");
+  Bullet bullet(assist.x() + ship_assist_width, assist.y(),
+                "bullet_assist.png");
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_3(ship.x() + ship_blue_width, ship.y(), "bullet.png");
   Asteroid asteroid((float)rand() / RAND_MAX * 800, 0, "asteroid.png");
@@ -57,27 +59,12 @@ int main() {
   while (window.isOpen()) {
     sf::Event event;
 
-    float time = clock.getElapsedTime().asSeconds();
-    clock.restart();
-
-    restarting_time += time;
-    if (restarting_time > red_restart && red_time != red_running) {
-      cout << restarting_time << "\n";
-      ability_red = true;
-      restarting_time = 0;
-
-      if (red_time < red_running) {
-        red_time = red_running;
-      }
-      cout << red_time << "\n";
-    }
-
     while (window.pollEvent(event)) {
       //открываем меню по нажатию Esc
       if (event.type == sf::Event::KeyPressed) {
         switch (event.key.code) {
         case sf::Keyboard::Escape:
-          menu_running = false;
+          menu_running = true;
           menu(window, menu_running);
           break;
         case sf::Keyboard::Space:
@@ -86,7 +73,8 @@ int main() {
             ability_red = false;
           }
           break;
-          default: break;
+        default:
+          break;
           // case sf::Keyboard::Return:
         }
       }
@@ -95,27 +83,23 @@ int main() {
     window.clear();
     window.draw(map.model_sprite);
     interface(window, ship, ship_2, count, earthlings, survived, ability_red);
-    if (is_it_the_end(ship, ship_2, earthlings)) {
-      sf::Text text;
-      sf::Font font;
-      std::stringstream st;
-      if (!font.loadFromFile("etc/font.ttf")) {
-        return -1;
+    if (is_it_the_end(ship, ship_2, earthlings, survived)) {
+      if (ship.destroyed && ship_2.destroyed) {
+        cause_of_death = 0;
       }
-      text.setFont(font);
-      st << "\tgame over";
-      text.setString(st.str());
-      text.setCharacterSize(30);
-      text.setPosition(270, 270);
-      window.draw(text);
-    }
-
-    else {
+      if (earthlings < min_survivors) {
+        cause_of_death = 1;
+      }
+      if (survived > max_survivors) {
+        cause_of_death = 3;
+      }
+      game_over(window, cause_of_death);
+    } else {
       survived += 1000000;
       earthlings -= 1000000;
       asteroid.update();
       if (asteroid.y() >= windowHeight) {
-        earthlings -= 100000000;
+        earthlings -= 1000000;
       }
       if (asteroid.destroyed) {
         asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
@@ -134,6 +118,21 @@ int main() {
       if (!ship_2.destroyed) {
         ship_2.update();
         Collision(ship_2, asteroid, count);
+        restarting_time++;
+        ;
+        //вот так нормально надо использовать время
+        /*  float time = clock.getElapsedTime().asSeconds();
+          clock.restart();
+          restarting_time += time; */
+        if (restarting_time >= red_restart && red_time != red_running) {
+          cout << restarting_time << "\n";
+          ability_red = true;
+          restarting_time = 0;
+          if (red_time < red_running) {
+            red_time = red_running;
+          }
+          cout << red_time << "\n";
+        }
         if (ability_red_use) {
           if (red_time >= 0) {
             assist.update();
@@ -143,7 +142,7 @@ int main() {
             bullet.draw(window);
             window.draw(assist.model_sprite);
             Collision(bullet, asteroid, count);
-            red_time -= time;
+            red_time--;
             draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
                                      bullet, assist.destroyed);
           } else
