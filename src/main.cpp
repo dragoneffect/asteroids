@@ -10,6 +10,15 @@
 #include "../include/menu.h"
 #include <SFML/Audio.hpp>
 
+bool ship_ability(bool start_ability, int &health1, int &health2) {
+  if (start_ability) {
+    health2 = 3;
+    health2 = 3;
+    start_ability = false;
+  }
+  return start_ability;
+}
+
 int main() {
   srand(time(NULL));
   //счет
@@ -73,9 +82,11 @@ int main() {
             ability_red = false;
           }
           break;
+        case sf::Keyboard::Return:
+          ship_ability(ability_red_use, ship.ship_health, ship_2.ship_health);
+          break;
         default:
           break;
-          // case sf::Keyboard::Return:
         }
       }
     }
@@ -108,6 +119,7 @@ int main() {
       if (!ship.destroyed) {
         ship.update();
         Collision(ship, asteroid, count);
+        if(ship_ability)
       }
       draw_obj.Draw_object(window, bullet_3.destroyed, bullet_3.model_sprite);
       bullet_3.update();
