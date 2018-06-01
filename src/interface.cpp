@@ -90,7 +90,7 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   text_blue.setCharacterSize(20);
   text_blue.setPosition(690, 575);
   if (!ship.destroyed) {
-    if (blue_time >= 3) {
+    if (blue_time >= 8) {
       text_blue.setColor(sf::Color::Red);
       window.draw(text_blue);
     } else {

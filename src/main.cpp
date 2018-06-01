@@ -1,14 +1,14 @@
+#include <SFML/Audio.hpp>
+#include "../include/const.h"
 #include "../include/global.h"
+#include "../include/menu.h"
 #include "../include/Asteroids.h"
 #include "../include/Draw.h"
 #include "../include/Ship.h"
+#include "../include/funcs.h"
 #include "../include/assistant.h"
 #include "../include/bullet.h"
-#include "../include/const.h"
-#include "../include/funcs.h"
 #include "../include/interface.h"
-#include "../include/menu.h"
-#include <SFML/Audio.hpp>
 
 bool ship_ability(bool start_ability, int &health1, int &health2,
                   float &ability_time) {
@@ -51,7 +51,7 @@ int main() {
   bool ability_blue = false;
   float ability_time = 0;
 
-  //  Clock clock;
+  Clock clock;
   sf::Draw draw_obj;
 
   sf::Music music;
@@ -73,7 +73,7 @@ int main() {
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_3(ship.x() + ship_blue_width, ship.y(), "bullet.png");
   Asteroid asteroid((float)rand() / RAND_MAX * 800, 0, "asteroid.png");
-  
+
   //открытие окна
   sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
                           sf::Style::Close);
@@ -81,6 +81,9 @@ int main() {
   //программа работает, пока окно открыто
   while (window.isOpen()) {
     sf::Event event;
+
+    float time = clock.getElapsedTime().asSeconds();
+    clock.restart();
 
     while (window.pollEvent(event)) {
       //открываем меню по нажатию Esc
@@ -97,7 +100,7 @@ int main() {
           }
           break;
         case sf::Keyboard::Return:
-          if (ability_time >= 3) {
+          if (ability_time >= 8) {
             ability_blue = true;
           }
           break;
@@ -109,7 +112,8 @@ int main() {
 
     window.clear();
     window.draw(map.model_sprite);
-    interface(window, ship, ship_2, count, earthlings, survived, ability_red);
+    interface(window, ship, ship_2, count, earthlings, survived, ability_red,
+              ability_time);
     if (is_it_the_end(ship, ship_2, earthlings, survived)) {
       if (ship.destroyed && ship_2.destroyed) {
         cause_of_death = 0;
@@ -135,7 +139,7 @@ int main() {
       if (!ship.destroyed) {
         ship.update();
         Collision(ship, asteroid, count);
-        if (ability_time >= 3) {
+        if (ability_time >= 8) {
           ability_blue = ship_ability(ability_blue, ship.ship_health,
                                       ship_2.ship_health, ability_time);
         } else {
@@ -152,7 +156,6 @@ int main() {
         ship_2.update();
         Collision(ship_2, asteroid, count);
         restarting_time++;
-        ;
         //вот так нормально надо использовать время
         /*  float time = clock.getElapsedTime().asSeconds();
           clock.restart();
