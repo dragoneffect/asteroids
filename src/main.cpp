@@ -146,11 +146,8 @@ int main() {
         for (int i = 0; i < NMAX; i++) {
           Collision(ship_2, *asteroid[i], count);
         }
-        restarting_time++;
-        //вот так нормально надо использовать время
-        /*  float time = clock.getElapsedTime().asSeconds();
-          clock.restart();
-          restarting_time += time; */
+
+        restarting_time += time;
         if (restarting_time >= red_restart && red_time != red_running) {
           cout << restarting_time << "\n";
           ability_red = true;
@@ -171,7 +168,7 @@ int main() {
             for (int i = 0; i < NMAX; i++) {
               Collision(bullet, *asteroid[i], count);
             }
-            red_time--;
+            red_time -= time;
             draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
                                      bullet, assist.destroyed);
           } else
@@ -192,6 +189,7 @@ int main() {
         asteroid[i]->update();
         if (asteroid[i]->y() >= windowHeight) {
           earthlings -= 1000000;
+          survived -= 10000000;
         }
         if (asteroid[i]->destroyed) {
           asteroid[i]->model_sprite.setPosition(

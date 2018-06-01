@@ -21,7 +21,7 @@ bool ship_ability(bool start_ability, int &health1, int &health2,
       health1++;
     }
     if (health2 && health2 < 3) {
-        health2++;
+      health2++;
     }
     ability_time = 0;
     start_ability = false;
