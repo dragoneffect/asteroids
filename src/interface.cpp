@@ -88,10 +88,10 @@ int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
   st_blue << "ability";
   text_blue.setString(st_blue.str());
   text_blue.setCharacterSize(20);
-  text_blue.setPosition(690, 575);
+  text_blue.setPosition(705, 575);
   if (!ship.destroyed) {
     if (blue_time >= 8) {
-      text_blue.setColor(sf::Color::Red);
+      text_blue.setColor(sf::Color::Blue);
       window.draw(text_blue);
     } else {
       text_red.setColor(sf::Color::White);

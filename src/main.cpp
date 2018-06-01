@@ -74,7 +74,7 @@ int main() {
         switch (event.key.code) {
         case sf::Keyboard::Escape:
           menu_running = true;
-          menu(window, menu_running);
+          menu(window, menu_running, restarting_time, red_time);
           break;
         case sf::Keyboard::Space:
           if (ability_red) {
@@ -114,6 +114,7 @@ int main() {
       asteroid.update();
       if (asteroid.y() >= windowHeight) {
         earthlings -= 1000000;
+        survived -= 50000000;
       }
       if (asteroid.destroyed) {
         asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
@@ -138,12 +139,9 @@ int main() {
       if (!ship_2.destroyed) {
         ship_2.update();
         Collision(ship_2, asteroid, count);
-        restarting_time++;
-        //вот так нормально надо использовать время
-        /*  float time = clock.getElapsedTime().asSeconds();
-          clock.restart();
-          restarting_time += time; */
-        if (restarting_time >= red_restart && red_time != red_running) {
+          restarting_time += time;
+          cout << restarting_time << "\n";
+        if (restarting_time > red_restart && red_time != red_running) {
           cout << restarting_time << "\n";
           ability_red = true;
           restarting_time = 0;
@@ -161,7 +159,7 @@ int main() {
             bullet.draw(window);
             window.draw(assist.model_sprite);
             Collision(bullet, asteroid, count);
-            red_time--;
+            red_time -= time;
             draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
                                      bullet, assist.destroyed);
           } else

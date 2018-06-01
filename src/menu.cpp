@@ -2,7 +2,7 @@
 #include "../include/gui.h"
 #include <list>
 
-bool menu(RenderWindow &window, bool &running) {
+bool menu(RenderWindow &window, bool &running, float &restarting_time, float &red_time) {
 
   list<Gui> buttons;
 
@@ -24,8 +24,14 @@ bool menu(RenderWindow &window, bool &running) {
   string Start = "START";
   string Exit = "EXIT";
 
+  Clock clock;
+
   //пока меню не закрыто, цикл работает
   while (running) {
+    float time = clock.getElapsedTime().asSeconds();
+    clock.restart();
+    restarting_time -= time;
+    red_time += time;
     //обрабатываем события
     sf::Event event;
     while (window.pollEvent(event)) {

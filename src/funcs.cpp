@@ -20,9 +20,13 @@ bool is_it_the_end(bool destroyed1, bool destroyed2, long long int people,
 bool ship_ability(bool start_ability, int &health1, int &health2,
                   float &ability_time) {
   if (start_ability && health1) {
+    if(health1 != 3) {
     health1++;
+  }
     if (health2) {
+      if(health2 != 3) {
         health2++;
+      }
     }
     ability_time = 0;
     start_ability = false;

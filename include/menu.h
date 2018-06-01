@@ -7,6 +7,6 @@
 using namespace std;
 using namespace sf;
 
-bool menu(RenderWindow &window, bool &running);
+bool menu(RenderWindow &window, bool &running, float &restarting_time, float &red_time);
 
 #endif

@@ -21,8 +21,7 @@ static int start_ship_y = windowHeight - 80;
 static int start_y_assist = windowHeight - 85;
 static int start_x_assist = (windowWidth / 2) - 100;
 //время перезарядки и длительности способностей
-static float red_restart = 555;
-static float blue_restart = 30;
-static float red_running = red_restart/2;
+static float red_restart = 10;
+static float red_running = 5;
 
 #endif
