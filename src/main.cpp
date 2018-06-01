@@ -1,7 +1,7 @@
 #include "../include/global.h"
-#include "../include/Model.h"
 #include "../include/Asteroids.h"
 #include "../include/Draw.h"
+#include "../include/Model.h"
 #include "../include/Ship.h"
 #include "../include/assistant.h"
 #include "../include/bullet.h"
@@ -46,7 +46,7 @@ int main() {
   Ship ship(start_x_blue, start_ship_y, "pl1.png", Keyboard::Left,
             Keyboard::Right, shipBlueW);
   Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D,
-            shipRedW);
+              shipRedW);
 
   Asteroid asteroid((float)rand() / RAND_MAX * windowWidth, 0, "asteroid.png");
 
@@ -102,10 +102,11 @@ int main() {
         cause_of_death = 0;
       }
       if (earthlings < min_survivors) {
-        cause_of_death = 1;
-      }
-      if (survived > max_survivors) {
-        cause_of_death = 3;
+        if (survived > max_survivors / 2) {
+          cause_of_death = 2;
+        } else {
+          return 1;
+        }
       }
       game_over(window, cause_of_death);
     } else {
@@ -139,8 +140,8 @@ int main() {
       if (!ship_2.destroyed) {
         ship_2.update();
         Collision(ship_2, asteroid, count);
-          restarting_time += time;
-          cout << restarting_time << "\n";
+        restarting_time += time;
+        cout << restarting_time << "\n";
         if (restarting_time > red_restart && red_time != red_running) {
           cout << restarting_time << "\n";
           ability_red = true;
@@ -175,8 +176,7 @@ int main() {
                                bullet_2, ship_2.destroyed);
       draw_obj.Draw_object(window, ship.destroyed, ship.model_sprite);
       draw_obj.Draw_object(window, ship_2.destroyed, ship_2.model_sprite);
-      draw_obj.Draw_object(window, asteroid.destroyed,
-      asteroid.model_sprite);
+      draw_obj.Draw_object(window, asteroid.destroyed, asteroid.model_sprite);
     }
     //отрисовка окна
     window.display();

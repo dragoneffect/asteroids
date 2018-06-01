@@ -15,14 +15,14 @@ public:
     if (y() < windowHeight && !destroyed) {
       model_sprite.move(velocity);
       velocity.y = asteroid_velocity;
-    }
-    else destroyed = true;
+    } else
+      destroyed = true;
   }
   float x() { return model_sprite.getPosition().x; }
   float y() { return model_sprite.getPosition().y; }
-  float left() { return x() - model_texture.getSize().x/2; }
-  float right() { return x() + model_texture.getSize().x/2; }
-  float top() { return y() - model_texture.getSize().y/2; }
-  float bottom() { return y() + model_texture.getSize().y/2; }
+  float left() { return x() - model_texture.getSize().x / 2; }
+  float right() { return x() + model_texture.getSize().x / 2; }
+  float top() { return y() - model_texture.getSize().y / 2; }
+  float bottom() { return y() + model_texture.getSize().y / 2; }
 };
 #endif

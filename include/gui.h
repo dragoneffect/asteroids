@@ -4,11 +4,10 @@
 #include "Model.h"
 
 class Gui : public Model {
-public:  
+public:
   string bttn_image;
-  Gui(float X, float Y, string bttn_image)
-      : Model(bttn_image) {
-    model_sprite.setPosition(X, Y);    
+  Gui(float X, float Y, string bttn_image) : Model(bttn_image) {
+    model_sprite.setPosition(X, Y);
   }
 };
 

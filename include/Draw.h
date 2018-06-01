@@ -15,7 +15,8 @@ public:
       window.draw(object_sprite);
   }
   void Bullet_position(float _X, float _Y, Bullet &bullet, bool _destroyed) {
-    X = _X; Y = _Y;
+    X = _X;
+    Y = _Y;
     destroyed = _destroyed;
     if (bullet.destroyed && !destroyed) {
       bullet.model_sprite.setPosition(X, Y);

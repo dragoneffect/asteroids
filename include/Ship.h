@@ -31,8 +31,7 @@ public:
       velocity.x = -ship_velocity;
     //аналогично здесь
     else if (Keyboard::isKeyPressed(move_right) &&
-             !Keyboard::isKeyPressed(move_left) &&
-             x() < 800 - ship_width)
+             !Keyboard::isKeyPressed(move_left) && x() < 800 - ship_width)
       velocity.x = ship_velocity;
     //если ничего не нажато, корабль не двигается
     else

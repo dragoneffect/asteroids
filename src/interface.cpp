@@ -3,8 +3,8 @@
 #include "../include/gui.h"
 
 int interface(RenderWindow &window, Ship ship, Ship ship2, int count,
-              long long int earthlings, long long int survived,
-              bool red_use, float blue_time) {
+              long long int earthlings, long long int survived, bool red_use,
+              float blue_time) {
 
   Gui red(25, 532, "pl2_little.png");
   Gui blue(720, 534, "pl1_little.png");

@@ -11,20 +11,17 @@ bool is_it_the_end(bool destroyed1, bool destroyed2, long long int people,
   if (people < min_survivors) {
     return true;
   }
-  if (survivors > max_survivors) {
-    return true;
-  }
   return false;
 }
 
 bool ship_ability(bool start_ability, int &health1, int &health2,
                   float &ability_time) {
   if (start_ability && health1) {
-    if(health1 != 3) {
-    health1++;
-  }
+    if (health1 != 3) {
+      health1++;
+    }
     if (health2) {
-      if(health2 != 3) {
+      if (health2 != 3) {
         health2++;
       }
     }
