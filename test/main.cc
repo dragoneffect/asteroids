@@ -1,8 +1,8 @@
 #include "../thirdparty/googletest/include/gtest/gtest.h"
 #include "../include/global.h"
-#include "../include/funcs.h"
-#include "../include/Ship.h"
 #include "../include/Asteroids.h"
+#include "../include/Ship.h"
+#include "../include/funcs.h"
 
 TEST(EndTestShips, Positive) {
   long long int people = 9000000000;
@@ -26,6 +26,20 @@ TEST(EndTestPeople, Negative) {
   long long int people = 7000000000;
   long long int survived = 10000000;
   EXPECT_EQ(false, is_it_the_end(false, false, people, survived));
+}
+
+TEST(AbilityBlue, Positive) {
+  int health1 = 3;
+  int health2 = 2;
+  float ability_time = 7;
+  EXPECT_EQ(false, ship_ability(true, health1, health2, ability_time));
+}
+
+TEST(AbilityBlue, Negative) {
+  int health1 = 0;
+  int health2 = 2;
+  float ability_time = 7;
+  EXPECT_EQ(true, ship_ability(true, health1, health2, ability_time));
 }
 
 TEST(Intersect, Positive) {
