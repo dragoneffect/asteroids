@@ -28,8 +28,12 @@ int main() {
   bool ability_red_use = false;
   bool menu_running = false;
   int cause_of_death = 0;
+  //отслеживает нажатие клавиши отв за способность
   bool ability_blue = false;
+  //кд способности
   float ability_time = 0;
+  //максимальное колво астероидов
+  int NMAX = 3;
 
   Clock clock;
   sf::Draw draw_obj;
@@ -48,7 +52,11 @@ int main() {
   Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D,
               shipRedW);
 
-  Asteroid asteroid((float)rand() / RAND_MAX * windowWidth, 0, "asteroid.png");
+  Asteroid *asteroid[NMAX];
+  for (int i = 0; i < NMAX; i++) {
+    asteroid[i] = new Asteroid((float)rand() / RAND_MAX * windowWidth - 80, 0,
+                               "asteroid1.png");
+  }
 
   Assistant assist(start_x_assist, start_y_assist, "assistant.png",
                    Keyboard::Space);
@@ -112,18 +120,12 @@ int main() {
     } else {
       survived += 1000000;
       earthlings -= 1000000;
-      asteroid.update();
-      if (asteroid.y() >= windowHeight) {
-        earthlings -= 1000000;
-        survived -= 50000000;
-      }
-      if (asteroid.destroyed) {
-        asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
-        asteroid.destroyed = false;
-      }
+      max_asteroids(survived, NMAX);
       if (!ship.destroyed) {
         ship.update();
-        Collision(ship, asteroid, count);
+        for (int i = 0; i < NMAX; i++) {
+          Collision(ship, *asteroid[i], count);
+        }
         if (ability_time >= 8) {
           ability_blue = ship_ability(ability_blue, ship.ship_health,
                                       ship_2.ship_health, ability_time);
@@ -136,13 +138,20 @@ int main() {
       bullet_3.update();
       draw_obj.Bullet_position(ship.x() + ship_blue_width, ship.y(), bullet_3,
                                ship.destroyed);
-      Collision(bullet_3, asteroid, count);
+      for (int i = 0; i < NMAX; i++) {
+        Collision(bullet_3, *asteroid[i], count);
+      }
       if (!ship_2.destroyed) {
         ship_2.update();
-        Collision(ship_2, asteroid, count);
-        restarting_time += time;
-        cout << restarting_time << "\n";
-        if (restarting_time > red_restart && red_time != red_running) {
+        for (int i = 0; i < NMAX; i++) {
+          Collision(ship_2, *asteroid[i], count);
+        }
+        restarting_time++;
+        //вот так нормально надо использовать время
+        /*  float time = clock.getElapsedTime().asSeconds();
+          clock.restart();
+          restarting_time += time; */
+        if (restarting_time >= red_restart && red_time != red_running) {
           cout << restarting_time << "\n";
           ability_red = true;
           restarting_time = 0;
@@ -159,8 +168,10 @@ int main() {
             bullet.update();
             bullet.draw(window);
             window.draw(assist.model_sprite);
-            Collision(bullet, asteroid, count);
-            red_time -= time;
+            for (int i = 0; i < NMAX; i++) {
+              Collision(bullet, *asteroid[i], count);
+            }
+            red_time--;
             draw_obj.Bullet_position(assist.x() + ship_assist_width, assist.y(),
                                      bullet, assist.destroyed);
           } else
@@ -171,12 +182,25 @@ int main() {
       bullet_2.update();
       bullet_2.update();
       bullet_2.update();
-      Collision(bullet_2, asteroid, count);
       draw_obj.Bullet_position(ship_2.x() + ship_red_width, ship_2.y(),
                                bullet_2, ship_2.destroyed);
       draw_obj.Draw_object(window, ship.destroyed, ship.model_sprite);
       draw_obj.Draw_object(window, ship_2.destroyed, ship_2.model_sprite);
-      draw_obj.Draw_object(window, asteroid.destroyed, asteroid.model_sprite);
+
+      for (int i = 0; i < NMAX; i++) {
+        Collision(bullet_2, *asteroid[i], count);
+        asteroid[i]->update();
+        if (asteroid[i]->y() >= windowHeight) {
+          earthlings -= 1000000;
+        }
+        if (asteroid[i]->destroyed) {
+          asteroid[i]->model_sprite.setPosition(
+              (float)rand() / RAND_MAX * windowWidth, 0);
+          asteroid[i]->destroyed = false;
+        }
+        draw_obj.Draw_object(window, asteroid[i]->destroyed,
+                             asteroid[i]->model_sprite);
+      }
     }
     //отрисовка окна
     window.display();
