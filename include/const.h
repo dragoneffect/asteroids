@@ -4,7 +4,9 @@
 //константы размера окна
 static const int windowWidth = 800, windowHeight = 600;
 //минимальное количество выживших
-static const long long int min_survivors = 2000000000;
+static const long long int min_survivors = 1000000000;
+//достаточное количество выживших
+static const long long int max_survivors = 8000000000;
 //ширина кораблей
 static float shipBlueW = 36;
 static float shipRedW = 55;
@@ -19,9 +21,9 @@ static int start_ship_y = windowHeight - 80;
 static int start_y_assist = windowHeight - 85;
 static int start_x_assist = (windowWidth / 2) - 100;
 //время перезарядки и длительности способностей
-static float red_restart = 10;
+static float red_restart = 555;
 static float blue_restart = 30;
-static float red_running = 5;
+static float red_running = red_restart/2;
 
 static int firstToDraw = 0;
 

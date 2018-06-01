@@ -9,8 +9,9 @@ TEST(EndTestShips, Positive) {
   Ship ship_2(10, 20, "pl2.png", Keyboard::A, Keyboard::D);
   ship.destroyed = true;
   ship_2.destroyed = true;
-  long long int people = 10000000000;
-  EXPECT_EQ(true, is_it_the_end(ship, ship_2, people));
+  long long int people = 9000000000;
+  long long int survived = 10000000;
+  EXPECT_EQ(true, is_it_the_end(ship, ship_2, people, survived));
 }
 
 TEST(EndTestShips, Negative) {
@@ -18,22 +19,25 @@ TEST(EndTestShips, Negative) {
   Ship ship_2(10, 20, "pl2.png", Keyboard::A, Keyboard::D);
   ship.destroyed = true;
   ship_2.destroyed = false;
-  long long int people = 10000000000;
-  EXPECT_EQ(false, is_it_the_end(ship, ship_2, people));
+  long long int people = 9000000000;
+  long long int survived = 10000000;
+  EXPECT_EQ(false, is_it_the_end(ship, ship_2, people, survived));
 }
 
 TEST(EndTestPeople, Positive) {
   Ship ship(10, 10, "pl1.png", Keyboard::Left, Keyboard::Right);
   Ship ship_2(10, 20, "pl2.png", Keyboard::A, Keyboard::D);
   long long int people = 100000;
-  EXPECT_EQ(true, is_it_the_end(ship, ship_2, people));
+  long long int survived = 10000000;
+  EXPECT_EQ(true, is_it_the_end(ship, ship_2, people, survived));
 }
 
 TEST(EndTestPeople, Negative) {
   Ship ship(10, 10, "pl1.png", Keyboard::Left, Keyboard::Right);
   Ship ship_2(10, 20, "pl2.png", Keyboard::A, Keyboard::D);
   long long int people = 7000000000;
-  EXPECT_EQ(false, is_it_the_end(ship, ship_2, people));
+  long long int survived = 10000000;
+  EXPECT_EQ(false, is_it_the_end(ship, ship_2, people, survived));
 }
 
 TEST(DrawingShips, Positive) {

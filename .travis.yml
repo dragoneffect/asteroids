@@ -15,3 +15,5 @@ addons:
     packages:
     - gcc-5
     - g++-5
+notifications:
+  email: false

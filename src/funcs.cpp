@@ -1,16 +1,50 @@
 #include "../include/global.h"
-#include "../include/const.h"
-#include "../include/Ship.h"
 #include "../include/Asteroids.h"
+#include "../include/Ship.h"
+#include "../include/const.h"
 
-bool is_it_the_end(Ship ship1, Ship ship2, long long int people) {
+bool is_it_the_end(Ship ship1, Ship ship2, long long int people,
+                   long long int survivors) {
   if (ship1.destroyed && ship2.destroyed) {
     return true;
   }
   if (people < min_survivors) {
     return true;
   }
+  if (survivors > max_survivors) {
+    return true;
+  }
   return false;
+}
+
+void game_over(RenderWindow &window, int cause) {
+  sf::Text text_over, text_cause;
+  sf::Font font;
+  std::stringstream st_over, st_cause;
+  font.loadFromFile("etc/font.ttf");
+  text_over.setFont(font);
+  text_cause.setFont(font);
+  st_over << "\tgame over";
+  text_over.setString(st_over.str());
+  text_over.setCharacterSize(30);
+  text_over.setPosition(270, 270);
+  text_over.setColor(sf::Color::Red);
+  window.draw(text_over);
+  if (cause == 0) {
+    st_cause << "you are destroyed";
+    text_cause.setPosition(225, 300);
+  } else if (cause == 1) {
+    st_cause << "people are dead";
+    text_cause.setPosition(245, 300);
+
+  } else {
+    st_cause << "\tyou won!";
+    text_cause.setPosition(286, 300);
+  }
+  text_cause.setString(st_cause.str());
+  text_cause.setCharacterSize(30);
+  text_cause.setColor(sf::Color::Red);
+  window.draw(text_cause);
 }
 
 bool first_to_draw(Ship ship, Ship ship_2) {
