@@ -10,6 +10,27 @@
 #include "../include/menu.h"
 #include <SFML/Audio.hpp>
 
+bool ship_ability(bool start_ability, int &health1, int &health2,
+                  float &ability_time) {
+  if (start_ability) {
+    health1 = 3;
+    health2 = 3;
+    ability_time = 0;
+    start_ability = false;
+  }
+  return start_ability;
+}
+
+bool is_it_the_end(bool destroyed1, bool destroyed2, long long int people) {
+  if (destroyed1 && destroyed2) {
+    return true;
+  }
+  if (people < min_survivors) {
+    return true;
+  }
+  return false;
+}
+
 int main() {
   srand(time(NULL));
   //счет
@@ -27,6 +48,8 @@ int main() {
   bool ability_red_use = false;
   bool menu_running = false;
   int cause_of_death = 0;
+  bool ability_blue = false;
+  float ability_time = 0;
 
   //  Clock clock;
   sf::Draw draw_obj;
@@ -50,7 +73,7 @@ int main() {
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_3(ship.x() + ship_blue_width, ship.y(), "bullet.png");
   Asteroid asteroid((float)rand() / RAND_MAX * 800, 0, "asteroid.png");
-
+  
   //открытие окна
   sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
                           sf::Style::Close);
@@ -73,9 +96,13 @@ int main() {
             ability_red = false;
           }
           break;
+        case sf::Keyboard::Return:
+          if (ability_time >= 3) {
+            ability_blue = true;
+          }
+          break;
         default:
           break;
-          // case sf::Keyboard::Return:
         }
       }
     }
@@ -108,6 +135,12 @@ int main() {
       if (!ship.destroyed) {
         ship.update();
         Collision(ship, asteroid, count);
+        if (ability_time >= 3) {
+          ability_blue = ship_ability(ability_blue, ship.ship_health,
+                                      ship_2.ship_health, ability_time);
+        } else {
+          ability_time += time;
+        }
       }
       draw_obj.Draw_object(window, bullet_3.destroyed, bullet_3.model_sprite);
       bullet_3.update();
