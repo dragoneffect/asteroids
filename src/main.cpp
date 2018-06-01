@@ -11,8 +11,6 @@
 #include "../include/menu.h"
 #include <SFML/Audio.hpp>
 
-int NMAX = 3;
-
 int main() {
   srand(time(NULL));
   //счет
@@ -30,8 +28,12 @@ int main() {
   bool ability_red_use = false;
   bool menu_running = false;
   int cause_of_death = 0;
+  //отслеживает нажатие клавиши отв за способность
   bool ability_blue = false;
+  //кд способности
   float ability_time = 0;
+  //максимальное колво астероидов
+  int NMAX = 3;
 
   Clock clock;
   sf::Draw draw_obj;
@@ -50,8 +52,6 @@ int main() {
   Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D,
               shipRedW);
 
-  // Asteroid asteroid((float)rand() / RAND_MAX * windowWidth, 0,
-  // "asteroid.png");
   Asteroid *asteroid[NMAX];
   for (int i = 0; i < NMAX; i++) {
     asteroid[i] = new Asteroid((float)rand() / RAND_MAX * windowWidth - 80, 0,
@@ -120,15 +120,7 @@ int main() {
     } else {
       survived += 1000000;
       earthlings -= 1000000;
-      asteroid.update();
-      if (asteroid.y() >= windowHeight) {
-        earthlings -= 1000000;
-        survived -= 50000000;
-      }
-      if (asteroid.destroyed) {
-        asteroid.model_sprite.setPosition((float)rand() / RAND_MAX * 600, 0);
-        asteroid.destroyed = false;
-      }
+      max_asteroids(survived, NMAX);
       if (!ship.destroyed) {
         ship.update();
         for (int i = 0; i < NMAX; i++) {
@@ -202,8 +194,8 @@ int main() {
           earthlings -= 1000000;
         }
         if (asteroid[i]->destroyed) {
-          asteroid[i]->model_sprite.setPosition((float)rand() / RAND_MAX * 600,
-                                                0);
+          asteroid[i]->model_sprite.setPosition(
+              (float)rand() / RAND_MAX * windowWidth, 0);
           asteroid[i]->destroyed = false;
         }
         draw_obj.Draw_object(window, asteroid[i]->destroyed,

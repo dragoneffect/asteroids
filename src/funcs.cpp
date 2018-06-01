@@ -20,15 +20,23 @@ bool ship_ability(bool start_ability, int &health1, int &health2,
     if (health1 != 3) {
       health1++;
     }
-    if (health2) {
-      if (health2 != 3) {
+    if (health2 && health2 < 3) {
         health2++;
-      }
     }
     ability_time = 0;
     start_ability = false;
   }
   return start_ability;
+}
+
+void max_asteroids(long long int _survived, int &N) {
+  long long int survied = _survived;
+  if (survied < min_survivors) {
+    N = 1;
+  } else if (survied < max_survivors - 2 * min_survivors) {
+    N = 2;
+  } else
+    N = 3;
 }
 
 void game_over(RenderWindow &window, int cause) {
