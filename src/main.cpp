@@ -149,13 +149,11 @@ int main() {
 
         restarting_time += time;
         if (restarting_time >= red_restart && red_time != red_running) {
-          cout << restarting_time << "\n";
           ability_red = true;
           restarting_time = 0;
           if (red_time < red_running) {
             red_time = red_running;
           }
-          cout << red_time << "\n";
         }
         if (ability_red_use) {
           if (red_time >= 0) {
