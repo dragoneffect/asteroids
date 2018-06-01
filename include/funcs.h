@@ -1,12 +1,14 @@
 #ifndef FUNCS_H
 #define FUNCS_H
 
-#include "Ship.h"
 #include "Asteroids.h"
+#include "Ship.h"
 
-bool is_it_the_end(Ship ship1, Ship ship2, long long int people, long long int survivors);
+bool is_it_the_end(bool destroyed1, bool destroyed2, long long int people,
+                   long long int survivors);
 void game_over(RenderWindow &window, int cause);
-bool first_to_draw(Ship ship, Ship ship_2);
+bool ship_ability(bool start_ability, int &health1, int &health2,
+                  float &ability_time);
 template <class T1, class T2> bool isIntersecting(T1 &object, T2 &asteroid);
 void Collision(Ship &ship, Asteroid &asteroid, int &count);
 void Collision(Bullet &bullet, Asteroid &asteroid, int &count);

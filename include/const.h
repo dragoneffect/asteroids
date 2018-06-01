@@ -25,6 +25,4 @@ static float red_restart = 555;
 static float blue_restart = 30;
 static float red_running = red_restart/2;
 
-static int firstToDraw = 0;
-
 #endif

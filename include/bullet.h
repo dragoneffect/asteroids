@@ -2,7 +2,7 @@
 #define BULLET_H
 
 #include "Model.h"
-const float bullet_velocity = 15.f;
+const float bullet_velocity = 5.f;
 
 class Bullet : public Model {
 public:

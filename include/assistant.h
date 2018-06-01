@@ -1,7 +1,7 @@
 #ifndef ASSISTANT_H
 #define ASSISTANT_H
 
-#include "Model.h"
+//#include "Model.h"
 
 class Assistant : public Model {
 public:

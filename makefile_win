@@ -1,9 +1,9 @@
 
 CC=g++
 
-OBJ = $(CC) -Wall -g -DSFML_STATIC -I SFML\include -c $< -o $@ $(CXXFLAGS)
+OBJ = $(CC) -Wall -g -DSFML_STATIC -I thirdparty\SFML\include -c $< -o $@ $(CXXFLAGS)
 
-CXXFLAGS= -L SFML\lib -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lopengl32 -lfreetype -ljpeg -lwinmm -lgdi32 -lsfml-audio-d
+CXXFLAGS= -L thirdparty\SFML\lib -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lopengl32 -lfreetype -ljpeg -lwinmm -lgdi32 -lsfml-audio-d
 
 default: asteroids
 

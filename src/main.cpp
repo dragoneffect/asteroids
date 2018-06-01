@@ -1,35 +1,15 @@
-#include <SFML/Audio.hpp>
-#include "../include/const.h"
 #include "../include/global.h"
-#include "../include/menu.h"
+#include "../include/Model.h"
 #include "../include/Asteroids.h"
 #include "../include/Draw.h"
 #include "../include/Ship.h"
-#include "../include/funcs.h"
 #include "../include/assistant.h"
 #include "../include/bullet.h"
+#include "../include/const.h"
+#include "../include/funcs.h"
 #include "../include/interface.h"
-
-bool ship_ability(bool start_ability, int &health1, int &health2,
-                  float &ability_time) {
-  if (start_ability) {
-    health1 = 3;
-    health2 = 3;
-    ability_time = 0;
-    start_ability = false;
-  }
-  return start_ability;
-}
-
-bool is_it_the_end(bool destroyed1, bool destroyed2, long long int people) {
-  if (destroyed1 && destroyed2) {
-    return true;
-  }
-  if (people < min_survivors) {
-    return true;
-  }
-  return false;
-}
+#include "../include/menu.h"
+#include <SFML/Audio.hpp>
 
 int main() {
   srand(time(NULL));
@@ -64,18 +44,21 @@ int main() {
   Model map("background.png");
   //изначальная позиция кораблей
   Ship ship(start_x_blue, start_ship_y, "pl1.png", Keyboard::Left,
-            Keyboard::Right);
-  Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D);
+            Keyboard::Right, shipBlueW);
+  Ship ship_2(start_x_red, start_ship_y, "pl2.png", Keyboard::A, Keyboard::D,
+            shipRedW);
+
+  Asteroid asteroid((float)rand() / RAND_MAX * windowWidth, 0, "asteroid.png");
+
   Assistant assist(start_x_assist, start_y_assist, "assistant.png",
                    Keyboard::Space);
   Bullet bullet(assist.x() + ship_assist_width, assist.y(),
                 "bullet_assist.png");
   Bullet bullet_2(ship_2.x() + ship_red_width, ship_2.y(), "bullet_red.png");
   Bullet bullet_3(ship.x() + ship_blue_width, ship.y(), "bullet.png");
-  Asteroid asteroid((float)rand() / RAND_MAX * 800, 0, "asteroid.png");
 
   //открытие окна
-  sf::RenderWindow window(sf::VideoMode(800, 600), "Asteroids",
+  sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Asteroids",
                           sf::Style::Close);
   window.setFramerateLimit(60);
   //программа работает, пока окно открыто
@@ -114,7 +97,7 @@ int main() {
     window.draw(map.model_sprite);
     interface(window, ship, ship_2, count, earthlings, survived, ability_red,
               ability_time);
-    if (is_it_the_end(ship, ship_2, earthlings, survived)) {
+    if (is_it_the_end(ship.destroyed, ship_2.destroyed, earthlings, survived)) {
       if (ship.destroyed && ship_2.destroyed) {
         cause_of_death = 0;
       }
@@ -189,12 +172,13 @@ int main() {
       bullet_2.update();
       bullet_2.update();
       bullet_2.update();
+      Collision(bullet_2, asteroid, count);
       draw_obj.Bullet_position(ship_2.x() + ship_red_width, ship_2.y(),
                                bullet_2, ship_2.destroyed);
-      Collision(bullet_2, asteroid, count);
       draw_obj.Draw_object(window, ship.destroyed, ship.model_sprite);
       draw_obj.Draw_object(window, ship_2.destroyed, ship_2.model_sprite);
-      draw_obj.Draw_object(window, asteroid.destroyed, asteroid.model_sprite);
+      draw_obj.Draw_object(window, asteroid.destroyed,
+      asteroid.model_sprite);
     }
     //отрисовка окна
     window.display();

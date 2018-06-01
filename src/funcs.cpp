@@ -3,9 +3,9 @@
 #include "../include/Ship.h"
 #include "../include/const.h"
 
-bool is_it_the_end(Ship ship1, Ship ship2, long long int people,
+bool is_it_the_end(bool destroyed1, bool destroyed2, long long int people,
                    long long int survivors) {
-  if (ship1.destroyed && ship2.destroyed) {
+  if (destroyed1 && destroyed2) {
     return true;
   }
   if (people < min_survivors) {
@@ -15,6 +15,19 @@ bool is_it_the_end(Ship ship1, Ship ship2, long long int people,
     return true;
   }
   return false;
+}
+
+bool ship_ability(bool start_ability, int &health1, int &health2,
+                  float &ability_time) {
+  if (start_ability && health1) {
+    health1++;
+    if (health2) {
+        health2++;
+    }
+    ability_time = 0;
+    start_ability = false;
+  }
+  return start_ability;
 }
 
 void game_over(RenderWindow &window, int cause) {
@@ -45,15 +58,6 @@ void game_over(RenderWindow &window, int cause) {
   text_cause.setCharacterSize(30);
   text_cause.setColor(sf::Color::Red);
   window.draw(text_cause);
-}
-
-bool first_to_draw(Ship ship, Ship ship_2) {
-  if (ship.x() > ship_2.x() && ship.x() < ship_2.x() + shipRedW)
-    return false;
-  else if (ship.x() < ship_2.x() && ship.x() > ship_2.x() - shipBlueW)
-    return false;
-  else
-    return true;
 }
 
 template <class T1, class T2> bool isIntersecting(T1 &object, T2 &asteroid) {
